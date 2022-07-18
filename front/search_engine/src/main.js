@@ -5,10 +5,13 @@ import store from './store'
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import VueSidebarMenuAkahon from "vue-sidebar-menu-akahon";
+
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+Vue.component('vue-sidebar-menu-akahon', VueSidebarMenuAkahon);
 
 new Vue({
   router,
