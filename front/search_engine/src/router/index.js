@@ -1,23 +1,68 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import BooleanSearchPage from '../views/BooleanSearchPage.vue'
+import TFIDFSearchPage from '../views/TFIDFSearchPage.vue'
+import FasttextSearchPage from '../views/FasttextSearchPage.vue'
+import TransformerSearchPage from '../views/TransformerSearchPage.vue'
+import ClassificationTransformersPage from '../views/ClassificationTransformersPage.vue'
+import ClassificationNaiveBayesPage from '../views/ClassificationNaiveBayesPage.vue'
+import ClusteringPage from '../views/ClusteringPage.vue'
+import HITSLinkAnalysisPage from '../views/HITSLinkAnalysisPage.vue'
+import PageRankLinkAnalysisPage from '../views/PageRankLinkAnalysisPage.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'BooleanSearchPage',
+    component: BooleanSearchPage
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    path: '/boolean',
+    name: 'BooleanSearchPage',
+    component: BooleanSearchPage
+  },
+  {
+    path: '/tfidf',
+    name: 'TFIDFSearchPage',
+    component: TFIDFSearchPage
+  },
+  {
+    path: '/fasttext',
+    name: 'FasttextSearchPage',
+    component: FasttextSearchPage
+  },
+  {
+    path: '/transformer',
+    name: 'TransformerSearchPage',
+    component: TransformerSearchPage
+  },
+  {
+    path: '/classification-transformers',
+    name: 'ClassificationTransformersPage',
+    component: ClassificationTransformersPage
+  },
+  {
+    path: '/classification-naive-bayes',
+    name: 'ClassificationNaiveBayesPage',
+    component: ClassificationNaiveBayesPage
+  },
+  {
+    path: '/clustering',
+    name: 'ClusteringPage',
+    component: ClusteringPage
+  },
+  {
+    path: '/hits',
+    name: 'HITSLinkAnalysisPage',
+    component: HITSLinkAnalysisPage
+  },
+  {
+    path: '/pagerank',
+    name: 'PageRankLinkAnalysisPage',
+    component: PageRankLinkAnalysisPage
+  },
 ]
 
 const router = new VueRouter({
