@@ -5,3 +5,5 @@ models.idea
 models
 data
 notebooks/.ipynb_checkpoints
+credentials
+src/config.py
