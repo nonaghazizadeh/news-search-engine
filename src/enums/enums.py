@@ -49,8 +49,5 @@ class StaticNum(Enum):
     FASTTEXT_MIN_COUNT = 4
 
 
-
-
-
 class ModelName(Enum):
     MODEL_NAME = 'SajjadAyoubi/distil-bigbird-fa-zwnj'
