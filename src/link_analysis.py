@@ -7,7 +7,7 @@ from src.enums.enums import Path
 
 class LinkAnalysis:
     def __init__(self, input_category, page_rank_mode=True, need_training=False):
-        self.pre_processor = PreProcessing(True)
+        self.pre_processor = PreProcessing(on_title=True)
         self.pre_processor()
         self.input_category = input_category
         self.selected_df = pd.DataFrame()

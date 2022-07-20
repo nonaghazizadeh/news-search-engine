@@ -7,8 +7,7 @@ import codecs
 
 
 class PreProcessing:
-    def __init__(self, on_title=False, need_preprocessing=False):
-        self.data_path = Path.DATA_PATH.value
+    def __init__(self, is_clf_tran=False, is_tran=False, on_title=False, need_preprocessing=False):
         self.normalizer = Normalizer()
         self.news_dict = dict()
         self.news_df = pd.DataFrame()
@@ -23,6 +22,8 @@ class PreProcessing:
         self.lemmatizer = Lemmatizer()
         self.on_title = on_title
         self.need_preprocessing = need_preprocessing
+        self.is_clf_tran = is_clf_tran
+        self.is_tran = is_tran
 
     def __call__(self):
         if self.need_preprocessing:
@@ -37,8 +38,10 @@ class PreProcessing:
             self.load_news_df()
             self.tokenizing_words()
 
+
     def load_data(self):
-        with open(self.data_path, "r", encoding="utf-8") as text_file:
+        path = Path.DATA_PATH.value if not self.is_tran else Path.DATA_PATH_TRAN.value
+        with open(path, "r", encoding="utf-8") as text_file:
             self.news_dict = json.loads(text_file.read())
 
     def normalize_data(self):
@@ -87,23 +90,40 @@ class PreProcessing:
         self.news_df['word_lemmatize'] = lemmatize_stemming_words
 
     def make_clean_data_content(self):
-        words = []
-        persian_numbers = ['۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
-        for row_words in self.news_df['word_lemmatize']:
-            final_words = ','.join(row_words)
-            final_words = final_words.replace('-', '')
-            for persian_num in persian_numbers:
-                if persian_num in list(final_words):
-                    final_words.replace(persian_num, '')
-            words.append(final_words)
-        self.news_df['clean_keyword'] = words
+        if self.is_clf_tran:
+            words = []
+            for row_words in self.news_df['word_lemmatize']:
+                words.append(' '.join(row_words))
+            self.news_df['clean_text'] = words
+        else:
+            words = []
+            persian_numbers = ['۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
+            for row_words in self.news_df['word_lemmatize']:
+                final_words = ','.join(row_words)
+                final_words = final_words.replace('-', '')
+                for persian_num in persian_numbers:
+                    if persian_num in list(final_words):
+                        final_words.replace(persian_num, '')
+                words.append(final_words)
+            self.news_df['clean_keyword'] = words
         if self.on_title:
             self.news_df = self.news_df.drop(['word_lemmatize'], axis=1)
         else:
             self.news_df = self.news_df.drop(['word_tokenize', 'word_lemmatize'], axis=1)
 
     def save_news_df(self):
-        self.news_df.to_pickle(Path.PROCESSED_DATA_PATH.value)
+        if self.is_clf_tran:
+            self.news_df.to_pickle(Path.CLF_PROCESSED_DATA_PATH.value)
+        elif self.is_tran:
+            self.news_df.to_pickle(Path.TRAN_PROCESSED_DATA_PATH.value)
+        else:
+            self.news_df.to_pickle(Path.PROCESSED_DATA_PATH.value)
 
     def load_news_df(self):
-        self.news_df = pd.read_pickle(Path.PROCESSED_DATA_PATH.value)
+        if self.is_clf_tran:
+            self.news_df = pd.read_pickle(Path.CLF_PROCESSED_DATA_PATH.value)
+        elif self.is_tran:
+            self.news_df = pd.read_pickle(Path.TRAN_PROCESSED_DATA_PATH.value)
+        else:
+            self.news_df = pd.read_pickle(Path.PROCESSED_DATA_PATH.value)
+

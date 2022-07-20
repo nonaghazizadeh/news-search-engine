@@ -16,8 +16,9 @@ class FasttextSearch:
         self.need_training = need_training
         self.query_embedding = []
         self.related_titles = dict()
-        self.qe = QueryExpansion(self.query_words)
-        self.qe()
+        if self.should_expand_query:
+            self.qe = QueryExpansion(self.query_words)
+            self.qe()
 
     def __call__(self):
         if self.need_training:
@@ -38,7 +39,7 @@ class FasttextSearch:
 
     def create_fasttext_data(self):
         tokens_list = self.pre_processor.news_df.clean_keyword.tolist()
-        for doc in tokens_list:
+        for doc in tqdm.tqdm(tokens_list):
             self.data += ' '.join(doc.split(",")) + '\n'
 
     def save_fasttext_data(self):
@@ -56,7 +57,7 @@ class FasttextSearch:
         self.model = fasttext.load_model(Path.FASTTEXT_MODEL_PATH.value)
 
     def calculate_doc_embedding(self):
-        for idx, doc in enumerate(self.pre_processor.news_df.clean_keyword):
+        for idx, doc in tqdm.tqdm(enumerate(self.pre_processor.news_df.clean_keyword)):
             doc_sum = np.zeros(100)
             for word in doc.split(','):
                 doc_sum = np.sum([doc_sum, self.model[word]], axis=0)
@@ -77,6 +78,7 @@ class FasttextSearch:
         self.query_embedding = query_sum / len(self.query_words)
 
     def fasttext_results(self, query_embedding=None, is_qe=False):
+        query_embedding = query_embedding if is_qe else self.query_embedding
         docs_cosine_similarity = {}
         for idx, doc_embedding in self.docs_embedding.items():
             docs_cosine_similarity[idx] = np.dot(np.array(doc_embedding), query_embedding) / (
