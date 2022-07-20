@@ -1,9 +1,10 @@
-from elasticsearch import Elasticsearch
+from src.enums.enums import StaticNum, Path
+from src.query_expansion import QueryExpansion
+
 import tqdm
 import json
-from src.enums.enums import StaticNum,Path
-from src.query_expansion import *
 import config
+from elasticsearch import Elasticsearch
 
 
 class ElasticSearch:
@@ -12,13 +13,14 @@ class ElasticSearch:
             cloud_id=config.CLOUD_ID,
             basic_auth=("elastic", config.ELASTIC_PASSWORD)
         )
-        self.body = {}
         self.query = query
-        self.related_titles = list()
-        self.qe = QueryExpansion(self.query.split())
-        self.qe()
         self.should_expand_query = should_expand_query
+        if self.should_expand_query:
+            self.qe = QueryExpansion(self.query.split())
+            self.qe()
+        self.body = {}
         self.need_indexing = need_indexing
+        self.related_titles = list()
 
     def __call__(self):
         self.create_body_match_query()

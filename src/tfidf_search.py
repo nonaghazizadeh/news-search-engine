@@ -1,25 +1,27 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from src.preprocessing import *
+from src.enums.enums import StaticNum, Path
+from src.query_expansion import QueryExpansion
+
 import pickle
 from scipy import sparse
-from src.enums.enums import StaticNum, Path
-from src.query_expansion import *
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from src.preprocessing import PreProcessing
 
 
 class TfidfSearch:
     def __init__(self, query, should_expand_query=True, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
-        self.tfidf = TfidfVectorizer()
-        self.tfidf_tran = None
-        self.related_titles = []
         self.query = query
         self.should_expand_query = should_expand_query
+        if self.should_expand_query:
+            self.qe = QueryExpansion(self.query.split())
+            self.qe()
+        self.tfidf = None
+        self.tfidf_tran = None
         self.need_training = need_training
-        self.query_vec = []
-        self.qe = QueryExpansion(self.query.split())
-        self.qe()
+        self.query_vec = list()
+        self.related_titles = list()
 
     def __call__(self):
         if self.need_training:

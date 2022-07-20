@@ -1,6 +1,7 @@
+from enums.enums import Path
+
 import json
 import pandas as pd
-from enums.enums import Path
 from hazm import *
 import tqdm
 import codecs
@@ -9,21 +10,21 @@ import codecs
 class PreProcessing:
     def __init__(self, is_clf_tran=False, is_tran=False, on_title=False, need_preprocessing=False):
         self.normalizer = Normalizer()
-        self.news_dict = dict()
-        self.news_df = pd.DataFrame()
+        self.stemmer = Stemmer()
+        self.lemmatizer = Lemmatizer()
         self.new_stopwords = \
             [self.normalizer.normalize(x.strip()) for x in codecs.open(
                 Path.NEW_STOPWORD_PATH.value, 'r', 'utf-8').readlines()]
         self.stopwords = \
             [self.normalizer.normalize(x.strip()) for x in codecs.open(
                 Path.STOPWORD_PATH.value, 'r', 'utf-8').readlines()]
-        self.tokenized_words = []
-        self.stemmer = Stemmer()
-        self.lemmatizer = Lemmatizer()
         self.on_title = on_title
         self.need_preprocessing = need_preprocessing
         self.is_clf_tran = is_clf_tran
         self.is_tran = is_tran
+        self.tokenized_words = list()
+        self.news_dict = dict()
+        self.news_df = pd.DataFrame()
 
     def __call__(self):
         if self.need_preprocessing:
@@ -37,7 +38,6 @@ class PreProcessing:
         else:
             self.load_news_df()
             self.tokenizing_words()
-
 
     def load_data(self):
         path = Path.DATA_PATH.value if not self.is_tran else Path.DATA_PATH_TRAN.value
@@ -126,4 +126,3 @@ class PreProcessing:
             self.news_df = pd.read_pickle(Path.TRAN_PROCESSED_DATA_PATH.value)
         else:
             self.news_df = pd.read_pickle(Path.PROCESSED_DATA_PATH.value)
-

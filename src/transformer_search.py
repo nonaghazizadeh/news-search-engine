@@ -1,11 +1,12 @@
-from transformers import BigBirdModel, AutoTokenizer
-import tqdm
-import numpy as np
-import json
 from src.enums.enums import StaticNum, Path, ModelName
 from src.preprocessing import PreProcessing
 from src.query_expansion import QueryExpansion
 from src.requirements.numpy_encoder import NumpyEncoder
+
+import tqdm
+import json
+import numpy as np
+from transformers import BigBirdModel, AutoTokenizer
 
 
 class TransformerSearcher:
@@ -13,16 +14,17 @@ class TransformerSearcher:
         self.numpy_encoder = NumpyEncoder
         self.pre_processor = PreProcessing(is_tran=True)
         self.pre_processor()
+        self.query = query
+        self.should_expand_query = should_expand_query
+        if self.should_expand_query:
+            self.qe = QueryExpansion(self.query.split(), need_training=True)
+            self.qe()
         self.model = None
         self.tokenizer = None
-        self.docs_embedding = dict()
-        self.query = query
-        self.query_vec = []
-        self.related_titles = dict()
-        self.qe = QueryExpansion(self.query.split(), need_training=True)
-        self.qe()
-        self.should_expand_query = should_expand_query
         self.need_training = need_training
+        self.docs_embedding = dict()
+        self.query_vec = list()
+        self.related_titles = dict()
 
     def __call__(self):
         if self.need_training:

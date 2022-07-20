@@ -1,11 +1,12 @@
+from src.preprocessing import PreProcessing
+from src.requirements.news_dataset import NewsDataset
+from src.enums.enums import StaticNum, Path, ModelName
+
+import csv
 import numpy as np
 from transformers import BigBirdModel, AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
-import csv
-from src.preprocessing import PreProcessing
-from src.requirements.news_dataset import NewsDataset
-from src.enums.enums import StaticNum, Path, ModelName
 
 
 class ClassificationTransformers:
@@ -24,9 +25,9 @@ class ClassificationTransformers:
         self.train_dataset = None
         self.val_dataset = None
         self.test_dataset = None
+        self.text_for_getting_category = text_for_getting_category
         self.need_training = need_training
         self.prediction_mode = prediction_mode
-        self.text_for_getting_category = text_for_getting_category
         self.confusion_matrix_evaluate = 0
         self.accuracy_score_evaluate = 0
         self.f1_score_evaluate = 0
@@ -60,19 +61,22 @@ class ClassificationTransformers:
         self.pre_processor.news_df['subject_id'] = self.pre_processor.news_df['subject'].factorize()[0]
 
     def create_x_y_classification(self):
-        pre_processed_news_dict = self.pre_processor.news_df.apply(lambda x: x.to_dict(), axis=1)
+        pre_processed_news_dict = self.pre_processor.news_df.apply(lambda ix: ix.to_dict(), axis=1)
         x = []
         for k, v in pre_processed_news_dict.items():
             x.append(v['clean_text'])
         y = np.array(self.pre_processor.news_df.subject_id.values)
         return x, y
 
-    def split_data_train_test_val(self, x, y, test_size=0.1, val_size=0.5, random_state=0, shuffle=True):
-        self.x_train, x_test_val, self.y_train, y_test_val = train_test_split(x, y, test_size=test_size,
-                                                                              random_state=random_state,
+    def split_data_train_test_val(self, x, y, shuffle=True):
+        self.x_train, x_test_val, self.y_train, y_test_val = train_test_split(x, y,
+                                                                              test_size=StaticNum.CLASSIFICATION_TRANSFORMERS_TEST_SIZE.value,
+                                                                              random_state=StaticNum.CLASSIFICATION_TRANSFORMERS_RANDOM_STATE.value,
                                                                               shuffle=shuffle)
-        self.x_val, self.x_test, self.y_val, self.y_test = train_test_split(x_test_val, y_test_val, test_size=val_size,
-                                                                            random_state=random_state, shuffle=shuffle)
+        self.x_val, self.x_test, self.y_val, self.y_test = train_test_split(x_test_val, y_test_val,
+                                                                            test_size=StaticNum.CLASSIFICATION_TRANSFORMERS_VAL_SIZE.value,
+                                                                            random_state=StaticNum.CLASSIFICATION_TRANSFORMERS_RANDOM_STATE.value,
+                                                                            shuffle=shuffle)
 
     def encoding_and_create_dataset(self):
         train_encodings = self.tokenizer(self.x_train, truncation=True, padding=True)
@@ -82,17 +86,18 @@ class ClassificationTransformers:
         self.val_dataset = NewsDataset(val_encodings, self.y_val)
         self.test_dataset = NewsDataset(test_encodings, self.y_test)
 
-    def train_transformer_classification(self, epoch=3, batch_size=16, num_labels=11, weight_decay=0.01, block_size=32):
-        self.model = BigBirdModel.from_pretrained(ModelName.MODEL_NAME.value, block_size=block_size)
+    def train_transformer_classification(self):
+        self.model = BigBirdModel.from_pretrained(ModelName.MODEL_NAME.value,
+                                                  block_size=StaticNum.CLASSIFICATION_TRANSFORMERS_BLOCK_SIZE.value)
         self.tokenizer = AutoTokenizer.from_pretrained(ModelName.MODEL_NAME.value)
         transformer_model = AutoModelForSequenceClassification.from_pretrained(ModelName.MODEL_NAME.value,
-                                                                               num_labels=num_labels)
+                                                                               num_labels=StaticNum.CLASSIFICATION_TRANSFORMERS_LABELS_NUM.value)
         training_args = TrainingArguments(
             output_dir=Path.CLASSIFICATION_TRANSFORMERS_TRAINING_ARG_PATH.value,
-            per_device_train_batch_size=batch_size,
-            per_device_eval_batch_size=batch_size,
-            num_train_epochs=epoch,
-            weight_decay=weight_decay,
+            per_device_train_batch_size=StaticNum.CLASSIFICATION_TRANSFORMERS_BATCH_SIZE.value,
+            per_device_eval_batch_size=StaticNum.CLASSIFICATION_TRANSFORMERS_BATCH_SIZE.value,
+            num_train_epochs=StaticNum.CLASSIFICATION_TRANSFORMERS_EPOCH.value,
+            weight_decay=StaticNum.CLASSIFICATION_TRANSFORMERS_WEIGHT_DECAY.value,
         )
 
         self.model = Trainer(

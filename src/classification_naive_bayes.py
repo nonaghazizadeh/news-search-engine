@@ -1,35 +1,34 @@
+from src.preprocessing import PreProcessing
+from src.enums.enums import Path, StaticNum
+
 import json
-from src.preprocessing import *
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import f1_score
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
 import pickle
 import csv
 import fasttext
-from src.enums.enums import Path
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
 
 
 class ClassificationNaiveBayes:
     def __init__(self, text_for_getting_category=None, prediction_mode=False, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
-        self.fasttext_docs_embedding = None
-        self.target_categories = []
         self.model = None
+        self.fasttext_model = None
+        self.fasttext_docs_embedding = None
+        self.target_categories = list()
         self.x_train = None
         self.x_test = None
         self.y_train = None
         self.y_test = None
+        self.text_for_getting_category = text_for_getting_category
+        self.prediction_mode = prediction_mode
+        self.need_training = need_training
         self.confusion_matrix_evaluate = 0
         self.accuracy_score_evaluate = 0
         self.f1_score_evaluate = 0
-        self.need_training = need_training
-        self.text_for_getting_category = text_for_getting_category
-        self.prediction_mode = prediction_mode
-        self.fasttext_model = None
 
     def __call__(self):
         if self.prediction_mode:
@@ -77,9 +76,10 @@ class ClassificationNaiveBayes:
         y = np.array(self.pre_processor.news_df.subject_id.values)
         return x, y
 
-    def split_data_train_test(self, x, y, test_size=0.1, random_state=0, shuffle=True):
-        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(x, y, test_size=test_size,
-                                                                                random_state=random_state,
+    def split_data_train_test(self, x, y, shuffle=True):
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(x, y,
+                                                                                test_size=StaticNum.CLASSIFICATION_NB_TEST_SIZE.value,
+                                                                                random_state=StaticNum.CLASSIFICATION_NB_RANDOM_STATE.value,
                                                                                 shuffle=shuffle)
 
     def fit_naive_bayes(self):

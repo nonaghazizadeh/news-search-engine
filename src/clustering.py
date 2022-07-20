@@ -1,31 +1,33 @@
+from src.preprocessing import PreProcessing
+from src.enums.enums import Path
+
 import json
-from src.preprocessing import *
+import tqdm
 import random
 import pickle
+import fasttext
+import numpy as np
+from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.metrics import davies_bouldin_score
-from sklearn import metrics
-import numpy as np
-import fasttext
-from src.enums.enums import Path
 
 
 class Clustering:
     def __init__(self, text_for_get_with_same_cluster=None, prediction_mode=False, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
+        self.model = None
+        self.fasttext_model = None
         self.fasttext_docs_embedding = None
         self.target_categories = list()
         self.category_dictionary = dict()
+        self.doc_titles = list()
         self.final_news_dict = dict()
         self.x = list()
         self.y = list()
-        self.doc_titles = list()
-        self.model = None
-        self.fasttext_model = None
         self.text_for_get_with_same_cluster = text_for_get_with_same_cluster
-        self.need_training = need_training
         self.prediction_mode = prediction_mode
+        self.need_training = need_training
         self.rss_evaluation = 0
         self.davies_bouldin = 0
         self.silhouette = 0

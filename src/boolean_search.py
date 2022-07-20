@@ -1,18 +1,21 @@
-from src.preprocessing import *
-from src.query_expansion import *
+from src.preprocessing import PreProcessing
+from src.query_expansion import QueryExpansion
 from src.enums.enums import StaticNum
+
+import pandas as pd
 
 
 class BooleanSearch:
     def __init__(self, query, should_expand_query=True):
         self.pre_processor = PreProcessing()
         self.pre_processor()
-        self.boolean_df = pd.DataFrame()
-        self.related_titles = []
         self.query_words = query.split()
-        self.qe = QueryExpansion(self.query_words)
-        self.qe()
         self.should_expand_query = should_expand_query
+        if self.should_expand_query:
+            self.qe = QueryExpansion(self.query_words)
+            self.qe()
+        self.boolean_df = pd.DataFrame()
+        self.related_titles = list()
 
     def __call__(self):
         self.create_boolean_retrieval_matrix()

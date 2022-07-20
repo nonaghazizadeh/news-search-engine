@@ -1,20 +1,22 @@
+from src.requirements.numpy_encoder import NumpyEncoder
+from src.enums.enums import Path
+
 import fasttext
 import json
-from src.requirements.numpy_encoder import *
-from src.enums.enums import Path
+import numpy as np
 
 
 class QueryExpansion:
     def __init__(self, query_words, need_training=False):
         self.numpy_encoder = NumpyEncoder
-        self.need_training = need_training
         self.fasttext_model = fasttext.load_model(Path.QE_FASTTEXT_MODEL_PATH.value)
         with open(Path.QE_FASTTEXT_DATA_PATH.value) as f:
             self.lines = f.read()
         self.words = self.lines.split()
+        self.need_training = need_training
+        self.query_words = query_words
         self.word2vec = dict()
         self.q_word2vec = dict()
-        self.query_words = query_words
 
     def __call__(self):
         if self.need_training:

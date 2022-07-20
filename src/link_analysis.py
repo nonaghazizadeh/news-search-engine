@@ -1,24 +1,26 @@
-import numpy as np
-from src.preprocessing import *
-from sklearn.preprocessing import normalize
-import networkx as nx
+from src.preprocessing import PreProcessing
 from src.enums.enums import Path
+
+import networkx as nx
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import normalize
 
 
 class LinkAnalysis:
     def __init__(self, input_category, page_rank_mode=True, need_training=False):
         self.pre_processor = PreProcessing(on_title=True)
         self.pre_processor()
+        self.graph = None
         self.input_category = input_category
         self.selected_df = pd.DataFrame()
-        self.selected_removed_tokenized_words = []
+        self.selected_removed_tokenized_words = list()
         self.similarity_mat = np.zeros((len(self.selected_df), len(self.selected_df)), dtype=float)
-        self.graph = None
+        self.page_rank_mode = page_rank_mode
+        self.need_training = need_training
         self.page_rank = None
         self.hubs = None
         self.authorities = None
-        self.page_rank_mode = page_rank_mode
-        self.need_training = need_training
 
     def __call__(self):
         self.split_related_category_dataframe()
@@ -63,11 +65,6 @@ class LinkAnalysis:
     def page_rank_algorithm(self, alpha=0.9):
         self.page_rank = nx.pagerank(self.graph, alpha=alpha)
 
-    @staticmethod
-    def get_top_n_news(values, n=5):
-        top_n = np.argsort(list(values))[::-1][:n]
-        return top_n
-
     def page_rank_results(self):
         for news_id in self.get_top_n_news(self.page_rank.values()):
             print(self.selected_df.iloc[news_id]['title'])
@@ -85,3 +82,8 @@ class LinkAnalysis:
         for news_id in self.get_top_n_news(self.hubs.values()):
             print(self.selected_df.iloc[news_id]['title'])
             print('-------------------------------')
+
+    @staticmethod
+    def get_top_n_news(values, n=5):
+        top_n = np.argsort(list(values))[::-1][:n]
+        return top_n

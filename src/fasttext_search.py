@@ -1,24 +1,30 @@
-from src.preprocessing import *
-from src.query_expansion import *
+from src.preprocessing import PreProcessing
+from src.query_expansion import QueryExpansion
 from src.enums.enums import StaticNum, Path
+from src.requirements.numpy_encoder import NumpyEncoder
+
+import json
+import fasttext
+import tqdm
+import numpy as np
 
 
 class FasttextSearch:
     def __init__(self, query, should_expand_query=True, need_training=False):
-        self.numpy_encoder = NumpyEncoder
         self.pre_processor = PreProcessing()
         self.pre_processor()
-        self.data = ''
-        self.model = None
-        self.docs_embedding = dict()
-        self.query_words = query.split()
+        self.numpy_encoder = NumpyEncoder
         self.should_expand_query = should_expand_query
-        self.need_training = need_training
-        self.query_embedding = []
-        self.related_titles = dict()
+        self.query_words = query.split()
         if self.should_expand_query:
             self.qe = QueryExpansion(self.query_words)
             self.qe()
+        self.data = ''
+        self.model = None
+        self.docs_embedding = dict()
+        self.query_embedding = list()
+        self.need_training = need_training
+        self.related_titles = dict()
 
     def __call__(self):
         if self.need_training:
@@ -48,7 +54,7 @@ class FasttextSearch:
 
     def train_fasttext(self):
         self.model = fasttext.train_unsupervised(Path.FASTTEXT_DATA_PATH.value, model='skipgram',
-                                                 minCount=4)
+                                                 minCount=StaticNum.FASTTEXT_MIN_COUNT.value)
 
     def save_fasttext(self):
         self.model.save_model(Path.FASTTEXT_MODEL_PATH.value)
