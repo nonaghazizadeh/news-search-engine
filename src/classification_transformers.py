@@ -10,7 +10,7 @@ from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
 
 
 class ClassificationTransformers:
-    def __init__(self, text_for_getting_category=None, need_training=False, prediction_mode=False):
+    def __init__(self, text_for_getting_category=None, need_training=False, prediction_mode=True):
         self.pre_processor = PreProcessing(is_clf_tran=True)
         self.pre_processor()
         self.model = None

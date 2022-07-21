@@ -116,6 +116,8 @@ class PreProcessing:
             self.news_df.to_pickle(Path.CLF_PROCESSED_DATA_PATH.value)
         elif self.is_tran:
             self.news_df.to_pickle(Path.TRAN_PROCESSED_DATA_PATH.value)
+        elif self.on_title:
+            self.news_df.to_pickle(Path.TITLE_PROCESSED_DATA_PATH.value)
         else:
             self.news_df.to_pickle(Path.PROCESSED_DATA_PATH.value)
 
@@ -124,5 +126,7 @@ class PreProcessing:
             self.news_df = pd.read_pickle(Path.CLF_PROCESSED_DATA_PATH.value)
         elif self.is_tran:
             self.news_df = pd.read_pickle(Path.TRAN_PROCESSED_DATA_PATH.value)
+        elif self.on_title:
+            self.news_df = pd.read_pickle(Path.TITLE_PROCESSED_DATA_PATH.value)
         else:
             self.news_df = pd.read_pickle(Path.PROCESSED_DATA_PATH.value)

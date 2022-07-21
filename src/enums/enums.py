@@ -9,6 +9,7 @@ class Path(Enum):
     PROCESSED_DATA_PATH = '../models/preprocessed_data/data.plk'
     TRAN_PROCESSED_DATA_PATH = '../models/preprocessed_data/tran_data.plk'
     CLF_PROCESSED_DATA_PATH = '../models/preprocessed_data/clf_data.plk'
+    TITLE_PROCESSED_DATA_PATH = '../models/preprocessed_data/title_data.plk'
     TFIDF_PATH = '../models/tfidf_search/tfidf.pk'
     TFIDF_TRAN_PATH = '../models/tfidf_search/tfidf_tran.npz'
     FASTTEXT_DATA_PATH = '../models/fasttext_search/fasttext_data.txt'

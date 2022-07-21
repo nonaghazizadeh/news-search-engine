@@ -12,7 +12,7 @@ from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
 
 
 class ClassificationNaiveBayes:
-    def __init__(self, text_for_getting_category=None, prediction_mode=False, need_training=False):
+    def __init__(self, text_for_getting_category=None, prediction_mode=True, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
         self.model = None
