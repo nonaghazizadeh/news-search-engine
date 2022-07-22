@@ -16,6 +16,7 @@ class BooleanSearch:
             self.qe()
         self.boolean_df = pd.DataFrame()
         self.related_titles = list()
+        self.final_results = dict()
 
     def __call__(self):
         self.create_boolean_retrieval_matrix()
@@ -40,18 +41,19 @@ class BooleanSearch:
         converted_df = self.boolean_df.all(axis='columns')
         converted_df = converted_df.to_frame('res')
         boolean_related_docs_index = converted_df.index[converted_df['res'] == True].tolist()
-        titles = list()
-        for idx in boolean_related_docs_index:
-            titles.append(self.pre_processor.news_df.iloc[idx, 0])
-        titles = list(dict.fromkeys(titles))
+        boolean_related_docs_index = list(dict.fromkeys(boolean_related_docs_index))
         if is_qe:
-            return titles
+            return boolean_related_docs_index
         else:
-            self.related_titles = titles
+            self.related_titles = boolean_related_docs_index
 
     def boolean_print_results(self, num=StaticNum.DOC_RELATED_NUM.value):
-        for idx, title in enumerate(self.related_titles[:num]):
-            print(f"{idx + 1}\t{title}")
+        for idx, ix in enumerate(self.related_titles[:num]):
+            self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[ix, 0],
+                                      "link": self.pre_processor.news_df.iloc[ix, 2]}
+
+        for idx, i in self.final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
     def boolean_merge_results(self, num=StaticNum.DOC_RELATED_NUM.value):
         new_query = self.qe.expand_query(0.7)
@@ -59,5 +61,8 @@ class BooleanSearch:
         qe_results = self.boolean_retrieval_result(True)
         res = [*self.related_titles[:num], *qe_results[:num]]
         res = list(dict.fromkeys(res))
-        for idx, title in enumerate(res):
-            print(f"{idx + 1}\t{title}")
+        for idx, ix in enumerate(res):
+            self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[ix, 0],
+                                      "link": self.pre_processor.news_df.iloc[ix, 2]}
+        for idx, i in self.final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
