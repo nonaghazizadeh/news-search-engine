@@ -25,6 +25,7 @@ class TransformerSearcher:
         self.docs_embedding = dict()
         self.query_vec = list()
         self.related_titles = dict()
+        self.final_results = dict()
 
     def __call__(self):
         if self.need_training:
@@ -117,7 +118,8 @@ class TransformerSearcher:
 
     def transformer_print_results(self):
         for idx, doc_id in enumerate((list(self.related_titles.items()))[:10]):
-            print(f"{idx + 1}   {self.pre_processor.news_df.iloc[int(doc_id[0])].title}")
+            self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[int(doc_id[0])].title,
+                                       "link": self.pre_processor.news_df.iloc[int(doc_id[0])].link}
 
     def transformer_merge_results(self, num=StaticNum.DOC_RELATED_NUM.value):
         nr_doc_avg = self.transformer_find_non_related_docs_avg()
@@ -127,4 +129,5 @@ class TransformerSearcher:
         res = [*(list(qe_results.items()))[:num], *(list(self.related_titles.items()))[:num]]
         res = list(dict.fromkeys(res))
         for idx, doc_id in enumerate(res):
-            print(f"{idx + 1}   {self.pre_processor.news_df.iloc[int(doc_id[0])].title}")
+            self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[int(doc_id[0])].title,
+                                       "link": self.pre_processor.news_df.iloc[int(doc_id[0])].link}
