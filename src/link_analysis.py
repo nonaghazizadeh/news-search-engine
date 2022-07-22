@@ -15,12 +15,15 @@ class LinkAnalysis:
         self.input_category = input_category
         self.selected_df = pd.DataFrame()
         self.selected_removed_tokenized_words = list()
-        self.similarity_mat = np.zeros((len(self.selected_df), len(self.selected_df)), dtype=float)
+        self.similarity_mat = None
         self.page_rank_mode = page_rank_mode
         self.need_training = need_training
         self.page_rank = None
         self.hubs = None
         self.authorities = None
+        self.pr_final_results = dict()
+        self.hub_final_results = dict()
+        self.auth_final_results = dict()
 
     def __call__(self):
         self.split_related_category_dataframe()
@@ -42,6 +45,7 @@ class LinkAnalysis:
 
     def create_similarity_matrix(self, threshold=4):
         news_num = len(self.selected_df)
+        self.similarity_mat = np.zeros((news_num, news_num), dtype=float)
         words_set = [set(ls) for ls in self.selected_removed_tokenized_words]
 
         for i in range(news_num):
@@ -66,22 +70,32 @@ class LinkAnalysis:
         self.page_rank = nx.pagerank(self.graph, alpha=alpha)
 
     def page_rank_results(self):
-        for news_id in self.get_top_n_news(self.page_rank.values()):
-            print(self.selected_df.iloc[news_id]['title'])
-            print('-------------------------------')
+        for idx, news_id in enumerate(self.get_top_n_news(self.page_rank.values())):
+            self.pr_final_results[idx] = {"title": self.selected_df.iloc[news_id]['title'],
+                                          "link": self.selected_df.iloc[news_id]['link']}
+        for idx, i in self.pr_final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
+        print(self.pr_final_results)
 
     def hits_algorithm(self):
         self.hubs, self.authorities = nx.hits(self.graph)
 
     def hits_results(self):
         print("AUTHORITIES")
-        for news_id in self.get_top_n_news(self.authorities.values()):
-            print(self.selected_df.iloc[news_id]['title'])
-            print('-------------------------------')
+        for idx, news_id in enumerate(self.get_top_n_news(self.authorities.values())):
+            self.auth_final_results[idx] = {"title": self.selected_df.iloc[news_id]['title'],
+                                            "link": self.selected_df.iloc[news_id]['link']}
+
+        for idx, i in self.auth_final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
+        print('-------------------------------------')
         print("HUBS")
-        for news_id in self.get_top_n_news(self.hubs.values()):
-            print(self.selected_df.iloc[news_id]['title'])
-            print('-------------------------------')
+        for idx, news_id in enumerate(self.get_top_n_news(self.hubs.values())):
+            self.hub_final_results[idx] = {"title": self.selected_df.iloc[news_id]['title'],
+                                           "link": self.selected_df.iloc[news_id]['link']}
+
+        for idx, i in self.auth_final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
     @staticmethod
     def get_top_n_news(values, n=5):
