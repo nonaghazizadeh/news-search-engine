@@ -55,7 +55,7 @@ export default {
     methods: {
     search(){
     this.loading=true;
-    let api = "http://127.0.0.1:8000/category?model=logistic&query=" + this.searchQuery
+    let api = "http://127.0.0.1:8000/category?model=transformer&query=" + this.searchQuery
     Vue.axios.get(api)
       .then(response => {
         this.info = response.data;

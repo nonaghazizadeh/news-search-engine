@@ -89,7 +89,7 @@ export default {
 }
 
 .input-container {
-  width:880px !important;
+  width:860px !important;
 }
 
 .raised-button {
