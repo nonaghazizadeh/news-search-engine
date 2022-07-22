@@ -25,6 +25,7 @@ class FasttextSearch:
         self.query_embedding = list()
         self.need_training = need_training
         self.related_titles = dict()
+        self.final_results = dict()
 
     def __call__(self):
         if self.need_training:
@@ -112,7 +113,10 @@ class FasttextSearch:
 
     def fasttext_print_results(self):
         for idx, doc_id in enumerate((list(self.related_titles.items()))[:10]):
-            print(f"{idx + 1}   {self.pre_processor.news_df.iloc[int(doc_id[0])].title}")
+            self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[int(doc_id[0])].title,
+                                       "link": self.pre_processor.news_df.iloc[int(doc_id[0])].link}
+        for idx, i in self.final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
     def fasttext_merge_results(self, num=StaticNum.DOC_RELATED_NUM.value):
         nr_doc_avg = self.find_non_related_docs_avg()
@@ -122,4 +126,7 @@ class FasttextSearch:
         res = [*(list(qe_results.items()))[:num], *(list(self.related_titles.items()))[:num]]
         res = list(dict.fromkeys(res))
         for idx, doc_id in enumerate(res):
-            print(f"{idx + 1}   {self.pre_processor.news_df.iloc[int(doc_id[0])].title}")
+            self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[int(doc_id[0])].title,
+                                       "link": self.pre_processor.news_df.iloc[int(doc_id[0])].link}
+        for idx, i in self.final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
