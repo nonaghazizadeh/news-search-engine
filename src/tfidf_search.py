@@ -23,6 +23,7 @@ class TfidfSearch:
         self.need_training = need_training
         self.query_vec = list()
         self.related_titles = list()
+        self.final_results = dict()
 
     def __call__(self):
         if self.need_training:
@@ -65,9 +66,12 @@ class TfidfSearch:
         else:
             self.related_titles = cosine_similarity(self.tfidf_tran, self.query_vec).reshape((-1,))
 
-    def tf_idf_print_results(self):
-        for idx, title in enumerate(np.array(self.related_titles).argsort()[-10:][::-1]):
-            print(f"{idx + 1}\t{self.pre_processor.news_df.iloc[title, 0]}")
+    def tf_idf_print_results(self, num=StaticNum.DOC_RELATED_NUM.value):
+        for idx, ix in enumerate(np.array(self.related_titles).argsort()[-num:][::-1]):
+            self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[ix, 0],
+                                       "link": self.pre_processor.news_df.iloc[ix, 2]}
+        for idx, i in self.final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
     def tf_idf_merge_results(self, num=StaticNum.DOC_RELATED_NUM.value):
         qe_query = self.qe.expand_query(0.85)
@@ -75,5 +79,9 @@ class TfidfSearch:
         qe_results = self.tf_idf_results(qe_query_vec, True)
         res = [*np.array(self.related_titles).argsort()[-num:][::-1], *qe_results.argsort()[-num:][::-1]]
         res = list(dict.fromkeys(res))
-        for idx, title in enumerate(res):
-            print(f"{idx + 1}\t{self.pre_processor.news_df.iloc[title, 0]}")
+        for idx, ix in enumerate(res):
+            self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[ix, 0],
+                                       "link": self.pre_processor.news_df.iloc[ix, 2]}
+
+        for idx, i in self.final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
