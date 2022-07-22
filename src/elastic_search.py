@@ -3,15 +3,15 @@ from src.query_expansion import QueryExpansion
 
 import tqdm
 import json
-import config
+from src.config import *
 from elasticsearch import Elasticsearch
 
 
 class ElasticSearch:
     def __init__(self, query, need_indexing=False, should_expand_query=True):
         self.client = Elasticsearch(
-            cloud_id=config.CLOUD_ID,
-            basic_auth=("elastic", config.ELASTIC_PASSWORD)
+            cloud_id=CLOUD_ID,
+            basic_auth=("elastic", ELASTIC_PASSWORD)
         )
         self.query = query
         self.should_expand_query = should_expand_query
@@ -20,7 +20,7 @@ class ElasticSearch:
             self.qe()
         self.body = {}
         self.need_indexing = need_indexing
-        self.related_titles = list()
+        self.related_titles = dict()
         self.final_results = dict()
 
     def __call__(self):
@@ -49,19 +49,18 @@ class ElasticSearch:
 
     def get_result(self, is_qe=False):
         res = self.client.search(index="news", body=self.body)['hits']['hits']
-        titles = list()
+        titles_and_link = dict()
         for idx, i in enumerate(res):
-            titles.append(i['_source']['_id'])
+            idx = idx + len(self.related_titles) if is_qe else idx
+            titles_and_link[idx] = {"title": i['_source']['title'], "link": i['_source']['link']}
         if is_qe:
-            return titles
+            return titles_and_link
         else:
-            self.related_titles = titles
+            self.related_titles = titles_and_link
 
-    def elastic_merge_results(self, num=StaticNum.DOC_RELATED_NUM.value):
-        self.query = self.qe.expand_query(0.7)
+    def elastic_merge_results(self):
+        self.query = self.qe.expand_query(0.8)
         self.create_body_match_query()
         qe_results = self.get_result(True)
-        res = [*self.related_titles[:num], *qe_results[:num]]
-        res = list(dict.fromkeys(res))
-        for idx, title in enumerate(res):
-            print(f"{idx + 1}\t{title}")
+        self.related_titles.update(qe_results)
+        self.final_results = self.related_titles
