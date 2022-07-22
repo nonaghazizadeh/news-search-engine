@@ -50,9 +50,10 @@ class PreProcessing:
             if self.on_title:
                 normalized_news_dict[idx] = {"title": self.normalizer.normalize(value['title']),
                                              "subject": value["subject"],
+                                             "link": value["link"],
                                              "content": value['content']}
             else:
-                normalized_news_dict[idx] = {"title": value['title'], "subject": value["subject"],
+                normalized_news_dict[idx] = {"title": value['title'], "subject": value["subject"], "link": value["link"],
                                              "content": self.normalizer.normalize(value['content'])}
         self.news_df = pd.DataFrame.from_dict(normalized_news_dict, orient='index')
 
@@ -106,6 +107,7 @@ class PreProcessing:
                         final_words.replace(persian_num, '')
                 words.append(final_words)
             self.news_df['clean_keyword'] = words
+
         if self.on_title:
             self.news_df = self.news_df.drop(['word_lemmatize'], axis=1)
         else:
