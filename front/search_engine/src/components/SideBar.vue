@@ -36,7 +36,7 @@
         {link: '/fasttext',name: 'Fasttext search', tooltip: 'Fasttext search', icon: 'bx-grid-alt' },
         {link: '/transformer',name: 'Transformer search', tooltip: 'Transformer search', icon: 'bx-grid-alt' },
         {link: '/classification-transformers',name: 'Classification transformers', tooltip: 'Classification transformers', icon: 'bx-grid-alt' },
-        {link: '/classification-naive-bayes',name: 'Classification Naive Bayes', tooltip: 'Classification Naive Bayes', icon: 'bx-grid-alt' },
+        {link: '/classification-logistic-regression',name: 'Classification Logistic Regression', tooltip: 'Classification Logistic Regression', icon: 'bx-grid-alt' },
         {link: '/clustering',name: 'Clustering', tooltip: 'Clustering', icon: 'bx-grid-alt' },
         {link: '/pagerank',name: 'PageRank link analysis', tooltip: 'PageRank link analysis', icon: 'bx-grid-alt' },
         {link: '/hits',name: 'HITS link analysis', tooltip: 'HITS link analysis', icon: 'bx-grid-alt' }
@@ -51,6 +51,6 @@
     display: none !important
 }
 .sidebar.open{
-    width: 320px !important
+    width: 360px !important
 }
 </style>
