@@ -31,6 +31,7 @@ class ClassificationTransformers:
         self.confusion_matrix_evaluate = 0
         self.accuracy_score_evaluate = 0
         self.f1_score_evaluate = 0
+        self.final_results = ''
 
     def __call__(self):
         self.convert_subject_to_id()
@@ -43,7 +44,7 @@ class ClassificationTransformers:
                 self.save_transformer_trainer()
             self.load_transformer()
             subject_id = self.predict(self.text_for_getting_category)
-            return self.target_categories[subject_id[0]]
+            self.final_results = self.target_categories[subject_id[0]]
         else:
             x, y = self.create_x_y_classification()
             self.split_data_train_test_val(x, y)
