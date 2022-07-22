@@ -3,26 +3,72 @@
     <h1 class="cover-heading">{{headerTitle}}</h1>
     <div class="medium-6 medium-offset-3 ctrl">
       <div class="searchForm">
-        <input type="text" v-model="searchQuery" placeholder="Type your query">
+        <div style="float:right">
+        <input class="input-container" 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="متن جستجو خود را بنویسید..."
+        >
+        </div>
+        <div style="float:right">
+        <a class="raised-button ink" @click="search">
+          <b-icon icon="search" aria-hidden="true"></b-icon>
+        </a>
+        </div>
       </div>
-      <a class="raised-button ink" @click="submitSearch">Search</a>
     </div>
+
+  <div v-if="loading" class="d-flex justify-content-center mb-3">
+    <b-spinner></b-spinner>
+  </div>
+
+    <ul class="data-results">
+      <li :v-show="showResults" v-for="(value, key) in info" :key="key">
+        <p :class="[Object.keys(info).length - 1 == key ? '' : 'outset']"> 
+          <a class='title-results' :href="value.link" > {{value.title}}</a>
+        </p>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
 export default {
   name: 'BooleanSearch',
   data(){
     return{
       headerTitle: "Boolean Search",
       searchQuery: '',
+      info: [],
+      showResults: false,
+      loading: false
+    }
+  },
+  methods: {
+    search(){
+    this.loading = true;
+    let api = "http://127.0.0.1:8000/search?model=boolean&query=" + this.searchQuery
+    Vue.axios.get(api)
+      .then(response => {
+        this.info = response.data;
+        this.showResults = true;
+        this.loading = false;
+      })
     }
   }
 }
 </script>
 
 <style>
+.input-container {
+  direction: rtl;
+}
+
 .ctrl {
   margin-bottom: 1.6rem;  
 }
@@ -109,4 +155,25 @@ input[type="text"]:focus {
   top: 1px;
   background: transparent;
 }
+
+.data-results{
+  list-style-type: none;
+}
+
+.title-results {
+  color: #201c34;
+  text-decoration: none;
+}
+.title-results:hover{
+  color: #4379a3;
+  font-weight: bold;
+}
+
+.outset {
+  padding-bottom: 12px;
+  -webkit-box-shadow: 0 4px 6px -6px #222;
+  -moz-box-shadow: 0 4px 6px -6px #222;
+  box-shadow: 0 4px 6px -6px #222;
+}
+
 </style>
