@@ -13,7 +13,7 @@ from sklearn.metrics import davies_bouldin_score
 
 
 class Clustering:
-    def __init__(self, text_for_get_with_same_cluster=None, prediction_mode=False, need_training=False):
+    def __init__(self, text_for_get_with_same_cluster=None, prediction_mode=True, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
         self.model = None
@@ -22,6 +22,7 @@ class Clustering:
         self.target_categories = list()
         self.category_dictionary = dict()
         self.doc_titles = list()
+        self.doc_links = list()
         self.final_news_dict = dict()
         self.x = list()
         self.y = list()
@@ -32,6 +33,7 @@ class Clustering:
         self.davies_bouldin = 0
         self.silhouette = 0
         self.purity_score = 0
+        self.final_results = dict()
 
     def __call__(self):
         self.load_fasttext_embedding()
@@ -40,13 +42,13 @@ class Clustering:
         if self.need_training:
             self.fit_kmeans_clustering()
             self.save_kmeans_model()
-        y_predicted = self.predict_kmeans_model(self.x)
         self.load_kmeans_model()
+        y_predicted = self.predict_kmeans_model(self.x)
         if self.prediction_mode:
             self.load_fasttext()
             embedding = [self.fasttext_model[self.text_for_get_with_same_cluster]]
             cluster_num = self.predict_kmeans_model(embedding)
-            return self.samples_from_cluster(y_predicted, cluster_num[0])
+            self.samples_from_cluster(y_predicted, cluster_num[0])
         else:
             self.print_clusters(y_predicted)
             self.evaluate_clustering(y_predicted)
@@ -76,6 +78,7 @@ class Clustering:
                 self.y.append(self.category_dictionary[self.final_news_dict[doc]['subject']])
                 self.x.append(self.fasttext_docs_embedding[doc])
                 self.doc_titles.append(self.final_news_dict[doc]['title'])
+                self.doc_links.append(self.final_news_dict[doc]['link'])
 
     def fit_kmeans_clustering(self, n_clusters=11, n_init=50, max_iter=1000, tol=1e-8):
         self.model = KMeans(n_clusters=n_clusters, n_init=n_init, max_iter=max_iter, tol=tol).fit(self.x)
@@ -90,18 +93,18 @@ class Clustering:
         y = self.model.predict(x)
         return y
 
-    def samples_from_cluster(self, y_predicted, category_id, k=5):
+    def samples_from_cluster(self, y_predicted, category_id, k=10):
         c = 0
-        ls = []
-        for predicted_category, doc_title in zip(y_predicted, self.doc_titles):
+        for predicted_category, doc_title, doc_link in zip(y_predicted, self.doc_titles, self.doc_links):
             if predicted_category == category_id:
-                ls.append(doc_title)
+                self.final_results[c] = {"title": doc_title, "link": doc_link}
                 c += 1
             else:
                 continue
             if c == k:
                 break
-        return ls
+        for idx, i in self.final_results.items():
+            print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
     def evaluate_clustering(self, y_predicted):
         self.rss_evaluation = self.model.inertia_
