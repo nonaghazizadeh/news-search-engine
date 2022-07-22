@@ -21,6 +21,7 @@ class ElasticSearch:
         self.body = {}
         self.need_indexing = need_indexing
         self.related_titles = list()
+        self.final_results = dict()
 
     def __call__(self):
         self.create_body_match_query()
@@ -33,7 +34,7 @@ class ElasticSearch:
 
         for i in tqdm.tqdm(range(len(news_dict))):
             temp_doc = news_dict[str(i)]
-            self.client.index(index="contents", id=i + 1, document=temp_doc)
+            self.client.index(index="news", id=i + 1, document=temp_doc)
 
     def create_body_match_query(self, num=StaticNum.DOC_RELATED_NUM.value):
         self.body = {
@@ -47,10 +48,10 @@ class ElasticSearch:
         }
 
     def get_result(self, is_qe=False):
-        res = self.client.search(index="contents", body=self.body)['hits']['hits']
+        res = self.client.search(index="news", body=self.body)['hits']['hits']
         titles = list()
         for idx, i in enumerate(res):
-            titles.append(i['_source']['title'])
+            titles.append(i['_source']['_id'])
         if is_qe:
             return titles
         else:
