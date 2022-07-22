@@ -18,10 +18,10 @@ class Path(Enum):
     TRANSFORMERS_MODEL_PATH = '../models/transformers_search/transformer_model.model'
     TRANSFORMERS_TOKENIZER_PATH = '../models/transformers_search/transformer_tokenizer'
     TRANSFORMERS_EMBEDDING_PATH = '../models/transformers_search/transformer_vectors_emb.json'
-    CLASSIFICATION_NB_FASTTEXT_EMBEDDING_PATH = '../models/classification_naive_bayes_improved/fasttext/fasttext_vectors_emb.json'
-    CLASSIFICATION_NB_FASTTEXT_MODEL_PATH = '../models/classification_naive_bayes_improved/fasttext/fasttext.bin'
-    CLASSIFICATION_NB_PATH = '../models/classification_naive_bayes_improved/naive_bayes_model.sav'
-    CLASSIFICATION_NB_RESULT_PATH = '../results/predicted_naive_bayes_improved.csv'
+    CLASSIFICATION_LR_FASTTEXT_EMBEDDING_PATH = '../models/classification_logistic_regression_improved/fasttext/fasttext_vectors_emb.json'
+    CLASSIFICATION_LR_FASTTEXT_MODEL_PATH = '../models/classification_logistic_regression_improved/fasttext/fasttext.bin'
+    CLASSIFICATION_LR_PATH = '../models/classification_logistic_regression_improved/logistic_regression_model.sav'
+    CLASSIFICATION_LR_RESULT_PATH = '../results/predicted_logistic_regression_improved.csv'
     CLASSIFICATION_TRANSFORMERS_PATH = '../models/classification_transformers'
     CLASSIFICATION_TRANSFORMERS_TRAINING_ARG_PATH = '../results'
     CLASSIFICATION_TRANSFORMERS_TOKENIZER_PATH = '../models/classification_transformers/transformer_tokenizer'
@@ -45,7 +45,7 @@ class StaticNum(Enum):
     CLASSIFICATION_TRANSFORMERS_TEST_SIZE = 0.1
     CLASSIFICATION_TRANSFORMERS_VAL_SIZE = 0.5
     CLASSIFICATION_TRANSFORMERS_RANDOM_STATE = 0
-    CLASSIFICATION_NB_TEST_SIZE = 0.1
+    CLASSIFICATION_NB_TEST_SIZE = 0.3
     CLASSIFICATION_NB_RANDOM_STATE = 0
     FASTTEXT_MIN_COUNT = 4
 
