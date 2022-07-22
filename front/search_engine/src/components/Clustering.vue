@@ -4,12 +4,31 @@
     <h1 class="cover-heading">{{headerTitle}}</h1>
     <div class="medium-6 medium-offset-3 ctrl">
       <div class="searchForm">
-        <input type="text" v-model="searchQuery" placeholder="Enter your title to get more news with same category">
+        <div style="float:right">
+        <input class="input-container" 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="متن جستجو خود را بنویسید..."
+        >
+        </div>
+        <div style="float:right">
+        <a class="raised-button ink" @click="search">
+          <b-icon icon="search" aria-hidden="true"></b-icon>
+        </a>
+        </div>
       </div>
-      <a class="raised-button ink" @click="submitSearch">Search</a>
     </div>
+  <div v-if="loading" class="d-flex justify-content-center mb-3">
+    <b-spinner></b-spinner>
   </div>
-  <div>
+
+    <ul class="data-results">
+      <li :v-show="showResults" v-for="(value, key) in info" :key="key">
+        <p :class="[Object.keys(info).length - 1 == key ? '' : 'outset']"> 
+          <a class='title-results' :href="value.link" > {{value.title}}</a>
+        </p>
+      </li>
+    </ul>
     <b-button class="modal-button" v-b-modal.eval-modal>Evaluation Criteria</b-button>
     <b-modal id="eval-modal" hide-footer>
         <p class="mb-4 ml-4">RSS: {{RSSScore}}</p>
@@ -22,16 +41,37 @@
 </template>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
 export default {
   name: 'Clustering',
   data(){
     return{
       headerTitle: "Clustering",
       searchQuery: '',
+      info: [],
+      showResults: false,
       RSSScore: 0,
       purity: 0,
       DaviesBouldienScore: 0,
       SilhouetteScore: 0,
+      loading: false
+    }
+  },
+  methods: {
+    search(){
+    this.loading = true;
+    let api = "http://127.0.0.1:8000/search?model=clustering&query=" + this.searchQuery
+    Vue.axios.get(api)
+      .then(response => {
+        this.info = response.data;
+        this.showResults = true;
+        this.loading = false;
+
+      })
     }
   }
 }
@@ -41,7 +81,6 @@ export default {
 .ctrl {
   margin-bottom: 1.6rem;  
 }
-
 .header {
   color: #201c34;
   height: 100%;
@@ -128,7 +167,8 @@ input[type="text"]:focus {
 .modal-button {
     position: absolute;
     right: 0;
-    bottom: 0;
+    top: 0;
+    bottom: 94%;
     margin-bottom: 5px;
     margin-right: 5px;
     color: #fff !important;
@@ -136,6 +176,7 @@ input[type="text"]:focus {
     border-color: transparent;
     outline: none;
     box-shadow: none;
+    width: 200px !important;
 }
 
 .modal-button:hover, .modal-button:focus, .modal-button:active, .modal-button:focus:active{
