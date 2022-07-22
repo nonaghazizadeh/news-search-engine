@@ -2,7 +2,7 @@
 .idea
 .DS_Store
 models.idea
-models/classification_naive_bayes_improved/fasttext/fasttext.bin
+models/classification_logistic_regression_improved/fasttext/fasttext.bin
 models/classification_transformers/pytorch_model.bin
 models/clustering/fasttext/fasttext.bin
 models/fasttext_search/fasttext.bin
@@ -17,3 +17,4 @@ notebooks/.ipynb_checkpoints
 credentials
 src/config.py
 __pycache__/
+src/main.py
