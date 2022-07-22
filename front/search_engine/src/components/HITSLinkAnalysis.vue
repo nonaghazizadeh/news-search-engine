@@ -3,20 +3,73 @@
     <h1 class="cover-heading">{{headerTitle}}</h1>
     <div class="medium-6 medium-offset-3 ctrl">
       <div class="searchForm">
-        <input type="text" v-model="searchQuery" placeholder="Enter category to get most important news in given category">
+        <div style="float:right">
+        <input class="input-container" 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="دسته‌بندی خود را وارد کنید تا مهم‌ترین خبر‌های آن دسته را ببینید..."
+        >
+        </div>
+        <div style="float:right">
+        <a class="raised-button ink" @click="search">
+          <b-icon icon="search" aria-hidden="true"></b-icon>
+        </a>
+        </div>
       </div>
-      <a class="raised-button ink" @click="submitSearch">Search</a>
     </div>
+      <div v-if="loading" class="d-flex justify-content-center mb-3">
+    <b-spinner></b-spinner>
+  </div>
+    <p v-show="showResults">AUTHORITIES</p>
+    <ul class="data-results">
+      <li :v-show="showResults" v-for="(value, key) in hubs_info" :key="key">
+        <p :class="[Object.keys(hubs_info).length - 1 == key ? '' : 'outset']"> 
+          <a class='title-results' :href="value.link" > {{value.title}}</a>
+        </p>
+      </li>
+    </ul>
+    <p v-show="showResults">HUBS</p>
+    <ul class="data-results">
+      <li :v-show="showResults" v-for="(value, key) in auth_info" :key="key">
+        <p :class="[Object.keys(auth_info).length - 1 == key ? '' : 'outset']"> 
+          <a class='title-results' :href="value.link" > {{value.title}}</a>
+        </p>
+      </li>
+    </ul>
+    
   </div>
 </template>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
 export default {
   name: 'HITSLinkAnalysis',
   data(){
     return{
       headerTitle: "HITS Link Analysis",
       searchQuery: '',
+      hubs_info: [],
+      auth_info: [],
+      showResults: false,
+      loading: false
+    }
+  },
+    methods: {
+    search(){
+    this.loading = true
+    let api = "http://127.0.0.1:8000/link?model=hits&category="+ this.searchQuery
+    Vue.axios.get(api)
+      .then(response => {
+        console.log(response.data['hub'])
+        this.hubs_info = response.data['hub'];
+        this.auth_info = response.data['auth'];
+        this.showResults = true;
+        this.loading = false;
+      })
     }
   }
 }
