@@ -1,0 +1,17 @@
+{
+  "cls_token": "[CLS]",
+  "do_basic_tokenize": true,
+  "do_lower_case": false,
+  "mask_token": "[MASK]",
+  "max_len": 4096,
+  "model_max_length": 512,
+  "name_or_path": "SajjadAyoubi/distil-bigbird-fa-zwnj",
+  "never_split": null,
+  "pad_token": "[PAD]",
+  "sep_token": "[SEP]",
+  "special_tokens_map_file": null,
+  "strip_accents": false,
+  "tokenize_chinese_chars": true,
+  "tokenizer_class": "DistilBertTokenizer",
+  "unk_token": "[UNK]"
+}

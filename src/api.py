@@ -74,6 +74,11 @@ def get_link(model: str, category: str):
         return link_analyser.pr_final_results
     else:
         return {
+<<<<<<< HEAD
             'hub': link_analyser.hub_final_results,
             'auth': link_analyser.auth_final_results
+=======
+            'hub': link_analyzer.hub_final_results,
+            'auth': link_analyzer.auth_final_results
+>>>>>>> 023b2d650bfdfd1999e3724017cc3681eeacf6f1
         }

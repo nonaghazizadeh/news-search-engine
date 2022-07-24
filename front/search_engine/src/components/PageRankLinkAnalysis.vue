@@ -50,7 +50,11 @@ export default {
   methods: {
     search(){
     this.loading = true;
+<<<<<<< HEAD
     let api = "http://127.0.0.1:8000/link?model=rank&category=" + this.searchQuery
+=======
+    let api = "http://127.0.0.1:8000/link?model=rank&query=" + this.searchQuery
+>>>>>>> 023b2d650bfdfd1999e3724017cc3681eeacf6f1
     Vue.axios.get(api)
       .then(response => {
         this.info = response.data;
@@ -89,7 +93,11 @@ export default {
 }
 
 .input-container {
+<<<<<<< HEAD
   width:880px !important;
+=======
+  width:860px !important;
+>>>>>>> 023b2d650bfdfd1999e3724017cc3681eeacf6f1
 }
 
 .raised-button {
