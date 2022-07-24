@@ -29,10 +29,20 @@ class Path(Enum):
     CLUSTERING_FASTTEXT_EMBEDDING_PATH = 'models/clustering/fasttext/fasttext_vectors_emb.json'
     CLUSTERING_FASTTEXT_MODEL_PATH = 'models/clustering/fasttext/fasttext.bin'
     CLUSTERING_PATH = 'models/clustering/kmeans_clustering.pkl'
-    LINK_ANALYSIS_PATH = 'models/link_analysis/graph.gml'
     QE_FASTTEXT_DATA_PATH = 'models/QE_fasttext/fasttext_data.txt'
     QE_FASTTEXT_MODEL_PATH = 'models/QE_fasttext/fasttext.bin'
     QE_ALL_EMBEDDING_PATH = 'models/QE_fasttext/all_words_vectors_emb_fasttext.json'
+    LINK_ANALYSIS_IRAN_PATH = 'models/link_analysis/graph_iran.gml'
+    LINK_ANALYSIS_WORLD_PATH = 'models/link_analysis/graph_world.gml'
+    LINK_ANALYSIS_ECONOMY_PATH = 'models/link_analysis/graph_economy.gml'
+    LINK_ANALYSIS_SOCIETY_PATH = 'models/link_analysis/graph_society.gml'
+    LINK_ANALYSIS_CITY_PATH = 'models/link_analysis/graph_city.gml'
+    LINK_ANALYSIS_DISTRICT_PATH = 'models/link_analysis/graph_district.gml'
+    LINK_ANALYSIS_LIFE_PATH = 'models/link_analysis/graph_life.gml'
+    LINK_ANALYSIS_IT_PATH = 'models/link_analysis/graph_it.gml'
+    LINK_ANALYSIS_SCIENCE_PATH = 'models/link_analysis/graph_science.gml'
+    LINK_ANALYSIS_CULTURE_PATH = 'models/link_analysis/graph_culture.gml'
+    LINK_ANALYSIS_SPORT_PATH = 'models/link_analysis/graph_sport.gml'
 
 
 class StaticNum(Enum):
@@ -52,3 +62,19 @@ class StaticNum(Enum):
 
 class ModelName(Enum):
     MODEL_NAME = 'SajjadAyoubi/distil-bigbird-fa-zwnj'
+
+
+class MapCategoryToPath(Enum):
+    CategoryToPath = {
+        'سیاسی': Path.LINK_ANALYSIS_IRAN_PATH.value,
+        'جهان': Path.LINK_ANALYSIS_WORLD_PATH.value,
+        'اقتصاد': Path.LINK_ANALYSIS_ECONOMY_PATH.value,
+        'جامعه': Path.LINK_ANALYSIS_SOCIETY_PATH.value,
+        'شهر': Path.LINK_ANALYSIS_CITY_PATH.value,
+        'محله': Path.LINK_ANALYSIS_DISTRICT_PATH.value,
+        'زندگی': Path.LINK_ANALYSIS_LIFE_PATH.value,
+        'فناوری اطلاعات': Path.LINK_ANALYSIS_IT_PATH.value,
+        'دانش': Path.LINK_ANALYSIS_SCIENCE_PATH.value,
+        'فرهنگ و هنر': Path.LINK_ANALYSIS_CULTURE_PATH.value,
+        'ورزش': Path.LINK_ANALYSIS_SPORT_PATH.value
+    }

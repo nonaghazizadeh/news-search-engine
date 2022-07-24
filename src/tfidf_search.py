@@ -1,5 +1,4 @@
 from src.enums.enums import StaticNum, Path
-from src.query_expansion import QueryExpansion
 
 import pickle
 from scipy import sparse
@@ -10,32 +9,24 @@ from src.preprocessing import PreProcessing
 
 
 class TfidfSearch:
-    def __init__(self, query, should_expand_query=True, need_training=False):
+    def __init__(self, qe_ins, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
-        self.query = query
-        self.should_expand_query = should_expand_query
-        if self.should_expand_query:
-            self.qe = QueryExpansion(self.query.split())
-            self.qe()
+        self.qe = qe_ins
         self.tfidf = None
         self.tfidf_tran = None
-        self.need_training = need_training
         self.query_vec = list()
         self.related_titles = list()
         self.final_results = dict()
-
-    def __call__(self):
-        if self.need_training:
+        if need_training:
             self.create_tf_idf_doc_term_matrix()
             self.save_tf_idf()
         self.load_tf_idf()
-        self.calculate_query_tf_idf()
+
+    def __call__(self, query):
+        self.calculate_query_tf_idf(query)
         self.tf_idf_results()
-        if self.should_expand_query:
-            self.tf_idf_merge_results()
-        else:
-            self.tf_idf_print_results()
+        self.tf_idf_merge_results(query)
 
     def create_tf_idf_doc_term_matrix(self):
         vocabulary = set()
@@ -57,8 +48,8 @@ class TfidfSearch:
 
         self.tfidf_tran = sparse.load_npz(Path.TFIDF_TRAN_PATH.value)
 
-    def calculate_query_tf_idf(self):
-        self.query_vec = self.tfidf.transform([self.query])
+    def calculate_query_tf_idf(self, query):
+        self.query_vec = self.tfidf.transform([query])
 
     def tf_idf_results(self, query_vec=None, is_qe=False):
         if is_qe:
@@ -73,8 +64,8 @@ class TfidfSearch:
         for idx, i in self.final_results.items():
             print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
-    def tf_idf_merge_results(self, num=StaticNum.DOC_RELATED_NUM.value):
-        qe_query = self.qe.expand_query(0.85)
+    def tf_idf_merge_results(self, query, num=StaticNum.DOC_RELATED_NUM.value):
+        qe_query = self.qe.expand_query(query, cosine_threshold=0.85)
         qe_query_vec = self.tfidf.transform([qe_query])
         qe_results = self.tf_idf_results(qe_query_vec, True)
         res = [*np.array(self.related_titles).argsort()[-num:][::-1], *qe_results.argsort()[-num:][::-1]]

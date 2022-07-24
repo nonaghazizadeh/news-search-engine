@@ -10,25 +10,18 @@ import numpy as np
 
 
 class FasttextSearch:
-    def __init__(self, query, should_expand_query=True, need_training=False):
+    def __init__(self, qe_ins, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
         self.numpy_encoder = NumpyEncoder
-        self.should_expand_query = should_expand_query
-        self.query_words = query.split()
-        if self.should_expand_query:
-            self.qe = QueryExpansion(self.query_words)
-            self.qe()
+        self.qe = qe_ins
         self.data = ''
         self.model = None
         self.docs_embedding = dict()
         self.query_embedding = list()
-        self.need_training = need_training
         self.related_titles = dict()
         self.final_results = dict()
-
-    def __call__(self):
-        if self.need_training:
+        if need_training:
             self.create_fasttext_data()
             self.save_fasttext_data()
             self.train_fasttext()
@@ -37,12 +30,11 @@ class FasttextSearch:
             self.save_doc_embedding()
         self.load_fasttext()
         self.load_doc_embedding()
-        self.calculate_query_embedding()
+
+    def __call__(self, query):
+        self.calculate_query_embedding(query)
         self.fasttext_results()
-        if self.should_expand_query:
-            self.fasttext_merge_results()
-        else:
-            self.fasttext_print_results()
+        self.fasttext_merge_results()
 
     def create_fasttext_data(self):
         tokens_list = self.pre_processor.news_df.clean_keyword.tolist()
@@ -78,11 +70,12 @@ class FasttextSearch:
         with open(Path.FASTTEXT_EMBEDDING_PATH.value, 'r', encoding="utf-8") as f:
             self.docs_embedding = json.loads(f.read())
 
-    def calculate_query_embedding(self):
+    def calculate_query_embedding(self, query):
         query_sum = np.zeros(100)
-        for q_word in self.query_words:
+        query_words = query.split()
+        for q_word in query_words:
             query_sum = np.sum([query_sum, self.model[q_word]], axis=0)
-        self.query_embedding = query_sum / len(self.query_words)
+        self.query_embedding = query_sum / len(query_words)
 
     def fasttext_results(self, query_embedding=None, is_qe=False):
         query_embedding = query_embedding if is_qe else self.query_embedding

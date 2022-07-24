@@ -1,5 +1,5 @@
 from src.preprocessing import PreProcessing
-from src.enums.enums import Path
+from src.enums.enums import Path,MapCategoryToPath
 
 import networkx as nx
 import numpy as np
@@ -8,15 +8,13 @@ from sklearn.preprocessing import normalize
 
 
 class LinkAnalysis:
-    def __init__(self, input_category, page_rank_mode=True, need_training=False):
+    def __init__(self, need_training=False):
         self.pre_processor = PreProcessing(on_title=True)
         self.pre_processor()
         self.graph = None
-        self.input_category = input_category
         self.selected_df = pd.DataFrame()
         self.selected_removed_tokenized_words = list()
         self.similarity_mat = None
-        self.page_rank_mode = page_rank_mode
         self.need_training = need_training
         self.page_rank = None
         self.hubs = None
@@ -25,22 +23,22 @@ class LinkAnalysis:
         self.hub_final_results = dict()
         self.auth_final_results = dict()
 
-    def __call__(self):
-        self.split_related_category_dataframe()
+    def __call__(self, input_category, page_rank_mode=True):
+        self.split_related_category_dataframe(input_category)
         if self.need_training:
             self.create_similarity_matrix()
             self.create_graph()
-            self.save_graph()
-        self.load_graph()
-        if self.page_rank_mode:
+            self.save_graph(input_category)
+        self.load_graph(input_category)
+        if page_rank_mode:
             self.page_rank_algorithm()
             self.page_rank_results()
         else:
             self.hits_algorithm()
             self.hits_results()
 
-    def split_related_category_dataframe(self):
-        self.selected_df = self.pre_processor.news_df[self.pre_processor.news_df["subject"] == self.input_category]
+    def split_related_category_dataframe(self, input_category):
+        self.selected_df = self.pre_processor.news_df[self.pre_processor.news_df["subject"] == input_category]
         self.selected_removed_tokenized_words = self.selected_df['word_tokenize'].tolist()
 
     def create_similarity_matrix(self, threshold=4):
@@ -60,11 +58,11 @@ class LinkAnalysis:
     def create_graph(self):
         self.graph = nx.from_numpy_array(self.similarity_mat)
 
-    def save_graph(self):
-        nx.write_gml(self.graph, Path.LINK_ANALYSIS_PATH.value)
+    def save_graph(self, input_category):
+        nx.write_gml(self.graph, MapCategoryToPath.CategoryToPath.value[input_category])
 
-    def load_graph(self):
-        self.graph = nx.read_gml(Path.LINK_ANALYSIS_PATH.value)
+    def load_graph(self, input_category):
+        self.graph = nx.read_gml(MapCategoryToPath.CategoryToPath.value[input_category])
 
     def page_rank_algorithm(self, alpha=0.9):
         self.page_rank = nx.pagerank(self.graph, alpha=alpha)

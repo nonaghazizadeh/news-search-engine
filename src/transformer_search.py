@@ -1,6 +1,5 @@
 from src.enums.enums import StaticNum, Path, ModelName
 from src.preprocessing import PreProcessing
-from src.query_expansion import QueryExpansion
 from src.requirements.numpy_encoder import NumpyEncoder
 
 import tqdm
@@ -10,15 +9,11 @@ from transformers import BigBirdModel, AutoTokenizer
 
 
 class TransformerSearcher:
-    def __init__(self, query, should_expand_query=True, need_training=False):
+    def __init__(self, qe_ins, need_training=False):
         self.numpy_encoder = NumpyEncoder
         self.pre_processor = PreProcessing(is_tran=True)
         self.pre_processor()
-        self.query = query
-        self.should_expand_query = should_expand_query
-        if self.should_expand_query:
-            self.qe = QueryExpansion(self.query.split(), need_training=True)
-            self.qe()
+        self.qe = qe_ins
         self.model = None
         self.tokenizer = None
         self.need_training = need_training
@@ -26,20 +21,17 @@ class TransformerSearcher:
         self.query_vec = list()
         self.related_titles = dict()
         self.final_results = dict()
-
-    def __call__(self):
         if self.need_training:
             self.save_transformer_pretrained_model()
             self.create_doc_embedding_avg_transformer()
             self.save_transformer_doc_embedding_avg()
         self.load_transformer_pretrained_model()
         self.load_transformer_doc_embedding_avg()
-        self.transformer_query_embedding()
+
+    def __call__(self, query):
+        self.transformer_query_embedding(query)
         self.transformers_results()
-        if self.should_expand_query:
-            self.transformer_merge_results()
-        else:
-            self.transformer_print_results()
+        self.transformer_merge_results()
 
     def save_transformer_pretrained_model(self, block_size=32):
         self.model = BigBirdModel.from_pretrained(ModelName.MODEL_NAME.value, block_size=block_size)
@@ -79,8 +71,8 @@ class TransformerSearcher:
             self.docs_embedding = json.loads(f.read())
         print(len(self.docs_embedding))
 
-    def transformer_query_embedding(self):
-        q_tokens_tran = self.tokenizer(self.query, return_tensors='pt')
+    def transformer_query_embedding(self, query):
+        q_tokens_tran = self.tokenizer(query, return_tensors='pt')
         q_output_tran = self.model(**q_tokens_tran)
         query_embedding_tran = q_output_tran[0][0].detach().numpy()
         qsum_tran = np.zeros(768)

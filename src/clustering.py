@@ -13,7 +13,7 @@ from sklearn.metrics import davies_bouldin_score
 
 
 class Clustering:
-    def __init__(self, text_for_get_with_same_cluster=None, prediction_mode=True, need_training=False):
+    def __init__(self, prediction_mode=True, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
         self.model = None
@@ -26,7 +26,6 @@ class Clustering:
         self.final_news_dict = dict()
         self.x = list()
         self.y = list()
-        self.text_for_get_with_same_cluster = text_for_get_with_same_cluster
         self.prediction_mode = prediction_mode
         self.need_training = need_training
         self.rss_evaluation = 0
@@ -34,8 +33,6 @@ class Clustering:
         self.silhouette = 0
         self.purity_score = 0
         self.final_results = dict()
-
-    def __call__(self):
         self.load_fasttext_embedding()
         self.prepare_documents_and_categories()
         self.create_x_y_clustering()
@@ -43,10 +40,12 @@ class Clustering:
             self.fit_kmeans_clustering()
             self.save_kmeans_model()
         self.load_kmeans_model()
+        self.load_fasttext()
+
+    def __call__(self, text_for_get_with_same_cluster):
         y_predicted = self.predict_kmeans_model(self.x)
         if self.prediction_mode:
-            self.load_fasttext()
-            embedding = [self.fasttext_model[self.text_for_get_with_same_cluster]]
+            embedding = [self.fasttext_model[text_for_get_with_same_cluster]]
             cluster_num = self.predict_kmeans_model(embedding)
             self.samples_from_cluster(y_predicted, cluster_num[0])
         else:

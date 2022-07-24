@@ -1,5 +1,4 @@
 from src.enums.enums import StaticNum, Path
-from src.query_expansion import QueryExpansion
 
 import tqdm
 import json
@@ -8,25 +7,21 @@ from elasticsearch import Elasticsearch
 
 
 class ElasticSearch:
-    def __init__(self, query, need_indexing=False, should_expand_query=True):
+    def __init__(self, qe_ins, need_indexing=False, ):
         self.client = Elasticsearch(
             cloud_id=CLOUD_ID,
             basic_auth=("elastic", ELASTIC_PASSWORD)
         )
-        self.query = query
-        self.should_expand_query = should_expand_query
-        if self.should_expand_query:
-            self.qe = QueryExpansion(self.query.split())
-            self.qe()
+        self.qe = qe_ins
         self.body = {}
         self.need_indexing = need_indexing
         self.related_titles = dict()
         self.final_results = dict()
 
-    def __call__(self):
-        self.create_body_match_query()
+    def __call__(self, query):
+        self.create_body_match_query(query)
         self.get_result()
-        self.elastic_merge_results()
+        self.elastic_merge_results(query)
 
     def index_data(self):
         with open(Path.DATA_PATH.value, "r", encoding="utf-8") as text_file:
@@ -36,13 +31,13 @@ class ElasticSearch:
             temp_doc = news_dict[str(i)]
             self.client.index(index="news", id=i + 1, document=temp_doc)
 
-    def create_body_match_query(self, num=StaticNum.DOC_RELATED_NUM.value):
+    def create_body_match_query(self, query, num=StaticNum.DOC_RELATED_NUM.value):
         self.body = {
             "from": 0,
             "size": num,
             "query": {
                 "match": {
-                    "content": self.query
+                    "content": query
                 }
             }
         }
@@ -58,9 +53,9 @@ class ElasticSearch:
         else:
             self.related_titles = titles_and_link
 
-    def elastic_merge_results(self):
-        self.query = self.qe.expand_query(0.8)
-        self.create_body_match_query()
+    def elastic_merge_results(self, query):
+        qe_query = self.qe.expand_query(query, 0.8)
+        self.create_body_match_query(qe_query)
         qe_results = self.get_result(True)
         self.related_titles.update(qe_results)
         self.final_results = self.related_titles

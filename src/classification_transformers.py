@@ -10,7 +10,7 @@ from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
 
 
 class ClassificationTransformers:
-    def __init__(self, text_for_getting_category=None, need_training=False, prediction_mode=True):
+    def __init__(self, need_training=False, prediction_mode=True):
         self.pre_processor = PreProcessing(is_clf_tran=True)
         self.pre_processor()
         self.model = None
@@ -25,34 +25,26 @@ class ClassificationTransformers:
         self.train_dataset = None
         self.val_dataset = None
         self.test_dataset = None
-        self.text_for_getting_category = text_for_getting_category
-        self.need_training = need_training
         self.prediction_mode = prediction_mode
         self.confusion_matrix_evaluate = 0
         self.accuracy_score_evaluate = 0
         self.f1_score_evaluate = 0
         self.final_results = ''
-
-    def __call__(self):
         self.convert_subject_to_id()
-        if self.prediction_mode:
-            if self.need_training:
-                x, y = self.create_x_y_classification()
-                self.split_data_train_test_val(x, y)
-                self.encoding_and_create_dataset()
-                self.train_dataset()
-                self.save_transformer_trainer()
-            self.load_transformer()
-            subject_id = self.predict(self.text_for_getting_category)
-            self.final_results = self.target_categories[subject_id[0]]
-        else:
+        if (self.prediction_mode and need_training) or (not self.prediction_mode):
             x, y = self.create_x_y_classification()
             self.split_data_train_test_val(x, y)
-            if self.need_training:
-                self.encoding_and_create_dataset()
-                self.train_dataset()
-                self.save_transformer_trainer()
-            self.load_transformer()
+        if need_training:
+            self.encoding_and_create_dataset()
+            self.train_transformer_classification()
+            self.save_transformer_trainer()
+        self.load_transformer()
+
+    def __call__(self, text_for_getting_category):
+        if self.prediction_mode:
+            subject_id = self.predict(text_for_getting_category)
+            self.final_results = self.target_categories[subject_id[0]]
+        else:
             y_predictions = self.predict()
             self.evaluate_transformer_classification(y_predictions)
 

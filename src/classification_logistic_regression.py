@@ -12,7 +12,7 @@ from sklearn.metrics import f1_score, confusion_matrix, accuracy_score
 
 
 class ClassificationLogisticRegression:
-    def __init__(self, text_for_getting_category=None, prediction_mode=True, need_training=False):
+    def __init__(self, prediction_mode=True, need_training=False):
         self.pre_processor = PreProcessing()
         self.pre_processor()
         self.model = None
@@ -23,36 +23,29 @@ class ClassificationLogisticRegression:
         self.x_test = None
         self.y_train = None
         self.y_test = None
-        self.text_for_getting_category = text_for_getting_category
         self.prediction_mode = prediction_mode
         self.need_training = need_training
         self.confusion_matrix_evaluate = 0
         self.accuracy_score_evaluate = 0
         self.f1_score_evaluate = 0
         self.final_results = ''
-
-    def __call__(self):
-        if self.prediction_mode:
-            self.convert_subject_to_id()
-            if self.need_training:
-                self.load_fasttext_embedding()
-                x, y = self.create_x_y_classification()
-                self.split_data_train_test(x, y)
-                self.fit_naive_bayes()
-                self.save_naive_bayes()
-            self.load_fasttext()
-            self.load_naive_bayes()
-            embedding = [self.fasttext_model[self.text_for_getting_category].tolist()]
-            subject_id = self.predict_naive_bayes(embedding)
-            self.final_results = self.target_categories[subject_id[0]]
-        else:
+        self.convert_subject_to_id()
+        if (need_training and self.prediction_mode) or (not self.prediction_mode):
             self.load_fasttext_embedding()
             x, y = self.create_x_y_classification()
             self.split_data_train_test(x, y)
-            if self.need_training:
-                self.fit_naive_bayes()
-                self.save_naive_bayes()
-            self.load_naive_bayes()
+        if need_training:
+            self.fit_naive_bayes()
+            self.save_naive_bayes()
+        self.load_fasttext()
+        self.load_naive_bayes()
+
+    def __call__(self, text_for_getting_category):
+        if self.prediction_mode:
+            embedding = [self.fasttext_model[text_for_getting_category].tolist()]
+            subject_id = self.predict_naive_bayes(embedding)
+            self.final_results = self.target_categories[subject_id[0]]
+        else:
             y_predictions = self.predict_naive_bayes(self.x_test)
             self.visualize_naive_bayes_csv(y_predictions)
             self.evaluate_naive_bayes(y_predictions)
