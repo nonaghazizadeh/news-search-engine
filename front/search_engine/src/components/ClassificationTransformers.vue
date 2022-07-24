@@ -4,12 +4,28 @@
     <h1 class="cover-heading">{{headerTitle}}</h1>
     <div class="medium-6 medium-offset-3 ctrl">
       <div class="searchForm">
-        <input type="text" v-model="searchQuery" placeholder="Enter your title to find its category">
+        <div style="float:right">
+        <input class="input-container" 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="متن خود را برای به دست آوردن دسته‌بندی بنویسید..."
+        >
+        </div>
+        <div style="float:right">
+        <a class="raised-button ink" @click="search">
+          <b-icon icon="search" aria-hidden="true"></b-icon>
+        </a>
+        </div>
       </div>
-      <a class="raised-button ink" @click="submitSearch">Search</a>
     </div>
+      <div v-if="loading" class="d-flex justify-content-center mb-3">
+    <b-spinner></b-spinner>
   </div>
-    <div>
+    <p v-show="showResults">
+      متن وارد شده مربوط به دسته {{info}} است
+    </p>
+  </div>
+  <div>
     <b-button class="modal-button" v-b-modal.eval-modal>Evaluation Criteria</b-button>
     <b-modal id="eval-modal" hide-footer>
         <p class="mb-4 ml-4">accuracy score: {{accuracyScore}}</p>
@@ -20,12 +36,32 @@
 </template>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
 export default {
   name: 'ClassificationTransformers',
   data(){
     return{
       headerTitle: "Classification based on transformers",
       searchQuery: '',
+      info:'',
+      showResults: false,
+      loading: false,
+    }
+  },
+    methods: {
+    search(){
+    this.loading=true;
+    let api = "http://127.0.0.1:8000/category?model=logistic&query=" + this.searchQuery
+    Vue.axios.get(api)
+      .then(response => {
+        this.info = response.data;
+        this.showResults = true;
+        this.loading = false;
+      })
     }
   }
 }

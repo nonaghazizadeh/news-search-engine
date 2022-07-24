@@ -5,7 +5,7 @@ import TFIDFSearchPage from '../views/TFIDFSearchPage.vue'
 import FasttextSearchPage from '../views/FasttextSearchPage.vue'
 import TransformerSearchPage from '../views/TransformerSearchPage.vue'
 import ClassificationTransformersPage from '../views/ClassificationTransformersPage.vue'
-import ClassificationNaiveBayesPage from '../views/ClassificationNaiveBayesPage.vue'
+import ClassificationLogisticRegressionPage from '../views/ClassificationLogisticRegressionPage.vue'
 import ClusteringPage from '../views/ClusteringPage.vue'
 import HITSLinkAnalysisPage from '../views/HITSLinkAnalysisPage.vue'
 import PageRankLinkAnalysisPage from '../views/PageRankLinkAnalysisPage.vue'
@@ -44,9 +44,9 @@ const routes = [
     component: ClassificationTransformersPage
   },
   {
-    path: '/classification-naive-bayes',
-    name: 'ClassificationNaiveBayesPage',
-    component: ClassificationNaiveBayesPage
+    path: '/classification-logistic-regression',
+    name: 'ClassificationLogisticRegressionPage',
+    component: ClassificationLogisticRegressionPage
   },
   {
     path: '/clustering',

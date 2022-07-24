@@ -3,20 +3,60 @@
     <h1 class="cover-heading">{{headerTitle}}</h1>
     <div class="medium-6 medium-offset-3 ctrl">
       <div class="searchForm">
-        <input type="text" v-model="searchQuery" placeholder="Type your query">
+        <div style="float:right">
+        <input class="input-container" 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="متن جستجو خود را بنویسید..."
+        >
+        </div>
+        <div style="float:right">
+        <a class="raised-button ink" @click="search">
+          <b-icon icon="search" aria-hidden="true"></b-icon>
+        </a>
+        </div>
       </div>
-      <a class="raised-button ink" @click="submitSearch">Search</a>
     </div>
+      <div v-if="loading" class="d-flex justify-content-center mb-3">
+    <b-spinner></b-spinner>
+  </div>
+    <ul class="data-results">
+      <li :v-show="showResults" v-for="(value, key) in info" :key="key">
+        <p :class="[Object.keys(info).length - 1 == key ? '' : 'outset']"> 
+          <a class='title-results' :href="value.link" > {{value.title}}</a>
+        </p>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
 export default {
   name: 'TransformerSearch',
   data(){
     return{
       headerTitle: "Transformer Search",
       searchQuery: '',
+      info: [],
+      showResults: false,
+      loading: false
+    }
+  },
+  methods: {
+    search(){
+    this.loading = true;
+    let api = "http://127.0.0.1:8000/search?model=transformer&query=" + this.searchQuery
+    Vue.axios.get(api)
+      .then(response => {
+        this.info = response.data;
+        this.showResults = true;
+        this.loading = false;
+      })
     }
   }
 }
