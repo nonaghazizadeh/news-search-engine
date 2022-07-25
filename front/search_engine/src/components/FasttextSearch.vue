@@ -17,6 +17,11 @@
         </div>
       </div>
     </div>
+          <div>
+    <b-form-checkbox dir="rtl" v-model="checked" name="check-button" switch>
+      گسترش کوئری
+    </b-form-checkbox>
+  </div>
       <div v-if="loading" class="d-flex justify-content-center mb-3">
     <b-spinner></b-spinner>
   </div>
@@ -44,13 +49,17 @@ export default {
       searchQuery: '',
       info: [],
       showResults: false,
-      loading: false
+      loading: false,
+      checked: false
     }
   },
     methods: {
     search(){
+    this.info = []
     this.loading = true;
     let api = "http://127.0.0.1:8000/search?model=fasttext&query=" + this.searchQuery
+                  + "&qe_en=" + this.checked
+
     Vue.axios.get(api)
       .then(response => {
         this.info = response.data;
@@ -138,15 +147,6 @@ input[type="text"]{
   margin: 1.75rem 0 0.5rem;
   border-bottom: 1px solid #e0e0e0;
   border-radius: 0;
-  background: transparent;
-}
-
-input[type="text"]:focus {
-  border: none;
-  border-bottom: 2px solid #201c34;
-  box-shadow: none;
-  position: relative;
-  top: 1px;
   background: transparent;
 }
 </style>

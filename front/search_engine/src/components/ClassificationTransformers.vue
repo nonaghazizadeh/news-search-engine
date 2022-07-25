@@ -48,6 +48,8 @@ export default {
       headerTitle: "Classification based on transformers",
       searchQuery: '',
       info:'',
+      accuracyScore: '86.149095 %',
+      f1Macro: '85.920362 %',
       showResults: false,
       loading: false,
     }
@@ -55,11 +57,7 @@ export default {
     methods: {
     search(){
     this.loading=true;
-<<<<<<< HEAD
-    let api = "http://127.0.0.1:8000/category?model=logistic&query=" + this.searchQuery
-=======
     let api = "http://127.0.0.1:8000/category?model=transformer&query=" + this.searchQuery
->>>>>>> 023b2d650bfdfd1999e3724017cc3681eeacf6f1
     Vue.axios.get(api)
       .then(response => {
         this.info = response.data;
@@ -150,14 +148,14 @@ input[type="text"]{
   background: transparent;
 }
 
-input[type="text"]:focus {
+/* input[type="text"]:focus {
   border: none;
   border-bottom: 2px solid #201c34;
   box-shadow: none;
   position: relative;
   top: 1px;
   background: transparent;
-}
+} */
 .modal-button {
     position: absolute;
     right: 0;

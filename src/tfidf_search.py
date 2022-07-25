@@ -23,10 +23,13 @@ class TfidfSearch:
             self.save_tf_idf()
         self.load_tf_idf()
 
-    def __call__(self, query):
+    def __call__(self, query, qe_en):
         self.calculate_query_tf_idf(query)
         self.tf_idf_results()
-        self.tf_idf_merge_results(query)
+        if qe_en:
+            self.tf_idf_merge_results(query)
+        else:
+            self.tf_idf_print_results()
 
     def create_tf_idf_doc_term_matrix(self):
         vocabulary = set()
@@ -58,6 +61,7 @@ class TfidfSearch:
             self.related_titles = cosine_similarity(self.tfidf_tran, self.query_vec).reshape((-1,))
 
     def tf_idf_print_results(self, num=StaticNum.DOC_RELATED_NUM.value):
+        self.final_results = dict()
         for idx, ix in enumerate(np.array(self.related_titles).argsort()[-num:][::-1]):
             self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[ix, 0],
                                        "link": self.pre_processor.news_df.iloc[ix, 2]}
@@ -65,6 +69,7 @@ class TfidfSearch:
             print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
     def tf_idf_merge_results(self, query, num=StaticNum.DOC_RELATED_NUM.value):
+        self.final_results = dict()
         qe_query = self.qe.expand_query(query, cosine_threshold=0.85)
         qe_query_vec = self.tfidf.transform([qe_query])
         qe_results = self.tf_idf_results(qe_query_vec, True)

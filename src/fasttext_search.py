@@ -31,10 +31,13 @@ class FasttextSearch:
         self.load_fasttext()
         self.load_doc_embedding()
 
-    def __call__(self, query):
+    def __call__(self, query, qe_en):
         self.calculate_query_embedding(query)
         self.fasttext_results()
-        self.fasttext_merge_results()
+        if qe_en:
+            self.fasttext_merge_results()
+        else:
+            self.fasttext_print_results()
 
     def create_fasttext_data(self):
         tokens_list = self.pre_processor.news_df.clean_keyword.tolist()
@@ -105,6 +108,7 @@ class FasttextSearch:
         return avg_related
 
     def fasttext_print_results(self):
+        self.final_results = dict()
         for idx, doc_id in enumerate((list(self.related_titles.items()))[:10]):
             self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[int(doc_id[0])].title,
                                        "link": self.pre_processor.news_df.iloc[int(doc_id[0])].link}
@@ -112,6 +116,7 @@ class FasttextSearch:
             print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
     def fasttext_merge_results(self, num=StaticNum.DOC_RELATED_NUM.value):
+        self.final_results = dict()
         nr_doc_avg = self.find_non_related_docs_avg()
         r_doc_avg = self.find_related_docs_avg()
         new_query_embedding = self.qe.expand_query_rocchio(self.query_embedding, nr_doc_avg, r_doc_avg)

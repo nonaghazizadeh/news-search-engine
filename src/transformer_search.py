@@ -28,10 +28,13 @@ class TransformerSearcher:
         self.load_transformer_pretrained_model()
         self.load_transformer_doc_embedding_avg()
 
-    def __call__(self, query):
+    def __call__(self, query, qe_en):
         self.transformer_query_embedding(query)
         self.transformers_results()
-        self.transformer_merge_results()
+        if qe_en:
+            self.transformer_merge_results()
+        else:
+            self.transformer_print_results()
 
     def save_transformer_pretrained_model(self, block_size=32):
         self.model = BigBirdModel.from_pretrained(ModelName.MODEL_NAME.value, block_size=block_size)
@@ -109,11 +112,13 @@ class TransformerSearcher:
         return avg_related
 
     def transformer_print_results(self):
+        self.final_results = dict()
         for idx, doc_id in enumerate((list(self.related_titles.items()))[:10]):
             self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[int(doc_id[0])].title,
                                        "link": self.pre_processor.news_df.iloc[int(doc_id[0])].link}
 
     def transformer_merge_results(self, num=StaticNum.DOC_RELATED_NUM.value):
+        self.final_results = dict()
         nr_doc_avg = self.transformer_find_non_related_docs_avg()
         r_doc_avg = self.transformer_find_related_docs_avg()
         new_query_embedding = self.qe.expand_query_rocchio(self.query_vec, np.array(nr_doc_avg), np.array(r_doc_avg))

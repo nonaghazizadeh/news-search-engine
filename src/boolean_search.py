@@ -13,10 +13,13 @@ class BooleanSearch:
         self.related_titles = list()
         self.final_results = dict()
 
-    def __call__(self, query):
+    def __call__(self, query, qe_en):
         self.create_boolean_retrieval_matrix(query)
         self.boolean_retrieval_result()
-        self.boolean_merge_results(query)
+        if qe_en:
+            self.boolean_merge_results(query)
+        else:
+            self.boolean_print_results()
 
     def create_boolean_retrieval_matrix(self, query):
         query_words = query.split()
@@ -40,6 +43,7 @@ class BooleanSearch:
             self.related_titles = boolean_related_docs_index
 
     def boolean_print_results(self, num=StaticNum.DOC_RELATED_NUM.value):
+        self.final_results = dict()
         for idx, ix in enumerate(self.related_titles[:num]):
             self.final_results[idx] = {"title": self.pre_processor.news_df.iloc[ix, 0],
                                        "link": self.pre_processor.news_df.iloc[ix, 2]}
@@ -48,6 +52,7 @@ class BooleanSearch:
             print(f"title: {i['title']}\n link: {i['link']}\n\n")
 
     def boolean_merge_results(self, query, num=StaticNum.DOC_RELATED_NUM.value):
+        self.final_results = dict()
         new_query = self.qe.expand_query(query, cosine_threshold=0.7)
         self.create_boolean_retrieval_matrix(new_query)
         qe_results = self.boolean_retrieval_result(True)

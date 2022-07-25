@@ -54,17 +54,17 @@ export default {
       searchQuery: '',
       info: [],
       showResults: false,
-      RSSScore: 0,
-      purity: 0,
-      DaviesBouldienScore: 0,
-      SilhouetteScore: 0,
+      RSSScore: 3340.408663,
+      purity: 0.519923,
+      DaviesBouldienScore: 1.94489853,
+      SilhouetteScore: 0.137699,
       loading: false
     }
   },
   methods: {
     search(){
     this.loading = true;
-    let api = "http://127.0.0.1:8000/search?model=clustering&query=" + this.searchQuery
+    let api = "http://127.0.0.1:8000/cluster?model=clustering&query=" + this.searchQuery
     Vue.axios.get(api)
       .then(response => {
         this.info = response.data;
@@ -155,14 +155,14 @@ input[type="text"]{
   background: transparent;
 }
 
-input[type="text"]:focus {
+/* input[type="text"]:focus {
   border: none;
   border-bottom: 2px solid #201c34;
   box-shadow: none;
   position: relative;
   top: 1px;
   background: transparent;
-}
+} */
 
 .modal-button {
     position: absolute;

@@ -154,12 +154,12 @@ input[type="text"]{
   background: transparent;
 }
 
-input[type="text"]:focus {
+/* input[type="text"]:focus {
   border: none;
   border-bottom: 2px solid #201c34;
   box-shadow: none;
   position: relative;
   top: 1px;
   background: transparent;
-}
+} */
 </style>

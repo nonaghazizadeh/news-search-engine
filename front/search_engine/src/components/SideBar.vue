@@ -35,6 +35,7 @@
         {link: '/tfidf',name: 'TF-IDF search', tooltip: 'TF-IDF search', icon: 'bx-grid-alt' },
         {link: '/fasttext',name: 'Fasttext search', tooltip: 'Fasttext search', icon: 'bx-grid-alt' },
         {link: '/transformer',name: 'Transformer search', tooltip: 'Transformer search', icon: 'bx-grid-alt' },
+        {link: '/elastic',name: 'Elastic search', tooltip: 'Elastic search', icon: 'bx-grid-alt' },
         {link: '/classification-transformers',name: 'Classification transformers', tooltip: 'Classification transformers', icon: 'bx-grid-alt' },
         {link: '/classification-logistic-regression',name: 'Classification Logistic Regression', tooltip: 'Classification Logistic Regression', icon: 'bx-grid-alt' },
         {link: '/clustering',name: 'Clustering', tooltip: 'Clustering', icon: 'bx-grid-alt' },

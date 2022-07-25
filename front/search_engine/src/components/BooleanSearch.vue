@@ -17,6 +17,11 @@
         </div>
       </div>
     </div>
+      <div>
+    <b-form-checkbox dir="rtl" v-model="checked" name="check-button" switch>
+      گسترش کوئری
+    </b-form-checkbox>
+  </div>
 
   <div v-if="loading" class="d-flex justify-content-center mb-3">
     <b-spinner></b-spinner>
@@ -46,13 +51,16 @@ export default {
       searchQuery: '',
       info: [],
       showResults: false,
-      loading: false
+      loading: false,
+      checked: false
     }
   },
   methods: {
     search(){
+    this.info = []
     this.loading = true;
-    let api = "http://127.0.0.1:8000/search?model=boolean&query=" + this.searchQuery
+    let api = "http://127.0.0.1:8000/search?model=boolean&query=" + this.searchQuery 
+              + "&qe_en=" + this.checked
     Vue.axios.get(api)
       .then(response => {
         this.info = response.data;
@@ -65,6 +73,21 @@ export default {
 </script>
 
 <style>
+.custom-control {
+  direction: rtl;
+  text-align: right;
+  margin-top:-30px;
+}
+
+.custom-control-input{
+  margin-left: 7px;
+  border-radius: 3px;
+}
+
+.custom-control-input:checked{
+   accent-color: #201c34;
+}
+
 .input-container {
   direction: rtl;
 }
@@ -147,16 +170,17 @@ input[type="text"]{
   background: transparent;
 }
 
-input[type="text"]:focus {
+/* input[type="text"]:focus {
   border: none;
   border-bottom: 2px solid #201c34;
   box-shadow: none;
   position: relative;
   top: 1px;
   background: transparent;
-}
+} */
 
 .data-results{
+  margin-top: 20px !important;
   list-style-type: none;
 }
 

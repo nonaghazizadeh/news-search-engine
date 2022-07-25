@@ -1,5 +1,4 @@
 <template>
-<div>
   <div class="row column header">
     <h1 class="cover-heading">{{headerTitle}}</h1>
     <div class="medium-6 medium-offset-3 ctrl">
@@ -8,7 +7,7 @@
         <input class="input-container" 
         type="text" 
         v-model="searchQuery" 
-        placeholder="متن خود را برای به دست آوردن دسته‌بندی بنویسید..."
+        placeholder="متن جستجو خود را بنویسید..."
         >
         </div>
         <div style="float:right">
@@ -18,21 +17,22 @@
         </div>
       </div>
     </div>
+          <div>
+    <b-form-checkbox dir="rtl" v-model="checked" name="check-button" switch>
+      گسترش کوئری
+    </b-form-checkbox>
+  </div>
       <div v-if="loading" class="d-flex justify-content-center mb-3">
     <b-spinner></b-spinner>
   </div>
-    <p v-show="showResults">
-      متن وارد شده مربوط به دسته {{info}} است
-    </p>
+    <ul class="data-results">
+      <li :v-show="showResults" v-for="(value, key) in info" :key="key">
+        <p :class="[Object.keys(info).length - 1 == key ? '' : 'outset']"> 
+          <a class='title-results' :href="value.link" > {{value.title}}</a>
+        </p>
+      </li>
+    </ul>
   </div>
-  <div>
-    <b-button class="modal-button" v-b-modal.eval-modal>Evaluation Criteria</b-button>
-    <b-modal id="eval-modal" hide-footer>
-        <p class="mb-4 ml-4">accuracy score: {{accuracyScore}}</p>
-        <p class="mt-4 ml-4">f1 macro: {{f1Macro}}</p>
-    </b-modal>
-  </div>
-</div>
 </template>
 
 <script>
@@ -42,22 +42,24 @@ import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
 
 export default {
-  name: 'ClasificationLogisticRegression',
+  name: 'ElasticSearch',
   data(){
     return{
-      headerTitle: "Classification Logistic Regression",
+      headerTitle: "Elastic Search",
       searchQuery: '',
-      info:'',
-      accuracyScore: '80.0132362 %',
-      f1Macro: '79.896585 %',
+      info: [],
       showResults: false,
-      loading: false
+      loading: false,
+      checked: false
+
     }
   },
   methods: {
     search(){
+    this.info = []
     this.loading = true;
-    let api = "http://127.0.0.1:8000/category?model=logistic&query=" + this.searchQuery
+    let api = "http://127.0.0.1:8000/search?model=elasticsearch&query=" + this.searchQuery
+                  + "&qe_en=" + this.checked
     Vue.axios.get(api)
       .then(response => {
         this.info = response.data;
@@ -146,30 +148,5 @@ input[type="text"]{
   border-bottom: 1px solid #e0e0e0;
   border-radius: 0;
   background: transparent;
-}
-
-.modal-button {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin-bottom: 5px;
-    margin-right: 5px;
-    color: #fff !important;
-    background-color: #201c34 !important;
-    border-color: transparent;
-    outline: none;
-    box-shadow: none;
-}
-
-.modal-button:hover, .modal-button:focus, .modal-button:active{
-    border-color: transparent;
-    outline: none;
-    box-shadow: none;
-}
-
-.close {
-    background-color: #fff;
-    border: none;
-    color: #201c34;
 }
 </style>

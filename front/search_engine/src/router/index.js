@@ -4,6 +4,7 @@ import BooleanSearchPage from '../views/BooleanSearchPage.vue'
 import TFIDFSearchPage from '../views/TFIDFSearchPage.vue'
 import FasttextSearchPage from '../views/FasttextSearchPage.vue'
 import TransformerSearchPage from '../views/TransformerSearchPage.vue'
+import ElasticSearchPage from '../views/ElasticSearchPage.vue'
 import ClassificationTransformersPage from '../views/ClassificationTransformersPage.vue'
 import ClassificationLogisticRegressionPage from '../views/ClassificationLogisticRegressionPage.vue'
 import ClusteringPage from '../views/ClusteringPage.vue'
@@ -37,6 +38,11 @@ const routes = [
     path: '/transformer',
     name: 'TransformerSearchPage',
     component: TransformerSearchPage
+  },
+  {
+    path: '/elastic',
+    name: 'ElasticSearchPage',
+    component: ElasticSearchPage
   },
   {
     path: '/classification-transformers',

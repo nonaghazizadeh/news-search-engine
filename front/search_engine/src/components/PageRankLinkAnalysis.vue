@@ -49,12 +49,9 @@ export default {
   },
   methods: {
     search(){
+      console.log('hi')
     this.loading = true;
-<<<<<<< HEAD
     let api = "http://127.0.0.1:8000/link?model=rank&category=" + this.searchQuery
-=======
-    let api = "http://127.0.0.1:8000/link?model=rank&query=" + this.searchQuery
->>>>>>> 023b2d650bfdfd1999e3724017cc3681eeacf6f1
     Vue.axios.get(api)
       .then(response => {
         this.info = response.data;
@@ -93,11 +90,7 @@ export default {
 }
 
 .input-container {
-<<<<<<< HEAD
-  width:880px !important;
-=======
-  width:860px !important;
->>>>>>> 023b2d650bfdfd1999e3724017cc3681eeacf6f1
+  width:955px !important;
 }
 
 .raised-button {
@@ -110,13 +103,15 @@ export default {
     vertical-align: middle;
     border: 1px solid transparent;
     border-radius: 0.25rem;
-    padding: 0.85em 1em;
+    /* padding: 0.85em 1em; */
     margin: 0 1rem 1rem 0;
     font-size: 0.9rem;
     background: #201c34;
     color: #FAFAFA;
     text-decoration: none;
-    margin-top: 30px;
+    margin-top: 1.74rem;
+    margin-right: -45px;
+    height: 2.434rem;
 }
 .raised-button:hover, .raised-button:focus {
     background: #fff;
@@ -145,21 +140,25 @@ input:focus {
     transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
     -webkit-appearance: none;
     -moz-appearance: none;
+    border-radius: 0.25rem;
 }
 input[type="text"]{
-  padding: 1rem 0 0.5rem 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
   margin: 1.75rem 0 0.5rem;
-  border-bottom: 1px solid #e0e0e0;
-  border-radius: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.25rem;
   background: transparent;
 }
 
-input[type="text"]:focus {
+/* input[type="text"]:focus {
+  padding: 0rem 0.5rem 0.5rem 0;
+  margin: 1.75rem 0 0.5rem;
+  border-radius: 0.25rem !important;
   border: none;
-  border-bottom: 2px solid #201c34;
+  border: 1px solid #201c34;
   box-shadow: none;
   position: relative;
   top: 1px;
   background: transparent;
-}
+} */
 </style>

@@ -18,10 +18,14 @@ class ElasticSearch:
         self.related_titles = dict()
         self.final_results = dict()
 
-    def __call__(self, query):
+    def __call__(self, query,qe_en):
         self.create_body_match_query(query)
         self.get_result()
-        self.elastic_merge_results(query)
+        if qe_en:
+            self.elastic_merge_results(query)
+        else:
+            self.get_result()
+            self.final_results = self.related_titles
 
     def index_data(self):
         with open(Path.DATA_PATH.value, "r", encoding="utf-8") as text_file:
