@@ -2,8 +2,6 @@
 
 
 
-
-
 فولدر enums:
 </br>
  در این فولدر یک فایل enums.py وجود دارد که در آن مقادیر static که در پروژه وجود دارد مقداردهی شده است.
@@ -44,7 +42,7 @@
    ذخیره می‌کنیم و حال برای تک تک کلمات کوئری‌مان امبدینگ fastetxt محاسبه می‌کنیم و فاصله کسینوسی تک تک کلمات کوئری‌مان را با امبدینگ fasttext ای که برای تمام کلمات تمام داک‌هایمان به دست آورده بودیم محاسبه می‌کنیم. (یک threshold برای فاصله کسینوسی برای جلوگیری از شباهت بسیار زیاد و بیهوده بودن گسترش کوئری‌مان در نظر می‌گیریم.) در نهایت کوئری‌مان را با کلمات به دست آمده جایگزین می‌کنیم و کوئری جدیدمان را جستجو می‌کنیم.
 </br>
    ارزیابی query expansion با معیار MRR را در این 
-  <a href="">لینک</a>
+  <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=207229796">لینک</a>
    می توانید مشاهده کنید.
   </li>
   </br>
@@ -76,23 +74,117 @@
  ذخیره می‌کنیم. حال برای هر داک میانگین امبدینگ توکنایز شده آن را به عنوان امبدینگ داک در نظر می‌گیریم و آن را در 
  <code>models/transformers_search/transformer_vectors_emb.json</code>
  ذخیره می‌کنیم. همچنین کوئری‌مان را نیز توکنایز می‌کنیم و امبدینگ آن را نیز با استفاده از مدل‌مان محاسبه می‌کنیم و در نهایت با محاسبه فاصله کوسینوسی مرتبط‌ترین داک‌های آن را به عنوان خروجی می‌دهیم.
- ارزیابی tfidf search با معیار MRR را در این 
+</br>
+ ارزیابی transformer search با معیار MRR را در این 
   <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=109295346">لینک</a>
    می توانید مشاهده کنید.
 
  </li>
  </br>
  <li>
- فایل boolean_search.py برای search کردن به روش boolean است. بدین گونه عمل می‌کنیم که از مدل fasttext استفاده می‌کنیم و آن را روی دیتا خودمان ترین می‌کنیم. سپس آن را در 
+ فایل fasttext_search.py برای search کردن به روش fasttext است. بدین گونه عمل می‌کنیم که از مدل fasttext استفاده می‌کنیم و آن را روی دیتا خودمان ترین می‌کنیم. سپس آن را در 
  <code>models/fasttext_search/fasttext.bin</code>
  ذخیره می‌کنیم و میانیگین امبدینگ‌های کلمات داک‌مان را محاسبه می‌کنیم و در 
  <code>models/fasttext_search/fasttext_vectors_emb.json</code>
  ذخیره می‌کنیم سپس امبدینگ کوئری‌مان را محاسبه کرده و در نهایت با محاسبه فاصله کوسینوسی مرتبط‌ترین داک‌های آن را به عنوان خروجی می‌دهیم.
- ارزیابی tfidf search با معیار MRR را در این 
+ </br>
+ ارزیابی fasttext search با معیار MRR را در این 
   <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=170900943">لینک</a>
    می توانید مشاهده کنید
  </li>
-</li>
+ </br>
+ <li>
+ فایل elastic_search.py برای سرچ کردن به کمک الستیک است برای این کار ابتدا یک cloud در خود الستیک ساختیم و با استفاده از credentional یعنی cloud_id و password ای که به ما می‌دهد به آن کانکت می‌شویم و سپس دیتا خام‌مان یعنی بدون preprocessed شده را در cloud ایندکس می‌کنیم و با کوئری match ریزالت‌های آن را می‌گیریم. (لازم به ذکر است که خود الستیک پیش‌پردازش‌های لازم را روی دیتا انجام می‌دهد.)
+ </br>
+ ارزیابی elastic search با معیار MRR را در این 
+  <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=1996135177">لینک</a>
+   می توانید مشاهده کنید.
+
+ </li>
+ </br>
+ <li>
+ فابل classification_logistic_regression.py برای انجام classification به یکی از روش‌های سنتی است. بدین صورت که در تمرین چهار این را با naive bayes انجام دادیم اما برای بهبود آن از روش سنتی دیگری استفاده می‌کنیم همچنین به جای استفاده از امبدینگ روش tfidf برای بهبود آن از روش fasttext استفاده می‌کنیم. سپس روی دیتا x_train و y_train آن را فیت می‌کنیم و مدلمان را در
+ <code>models/classification_logistic_regression_improved/logistic_regression_model.sav</code>
+ ذخیره می‌کنیم و با دادن یک کوئری به آن امبدینگ fasttext آن را محاسبه می‌کنیم و برای predict کردن دسته‌بندی آن را به مدلمان داده و لیبل آن را predict می‌کنیم 
+ </br>
+ معیارهای ارزیابی این حالت دسته‌بندی رابط کاربری مشخص است و به شرح زیر می‌باشد.
+ </br>
+<div>
+<table dir="ltr">
+  <tr>
+    <th>Evaluion criteria</th>
+    <th>Value (%)</th>
+  </tr>
+  <tr>
+    <td>accuracy score</td>
+    <td>80.0132362</td>
+  </tr>
+  <tr>
+    <td>f1 macro score</td>
+    <td>79.896585</td>
+  </tr>
+</table>
+ </div>
+ </li>
+ </br>
+ <li>
+ فایل classification_transformer.py برای انجام classification از روش دیگری مبتنی بر transformer ها استفاده می‌کنیم از مدل AutoModelForSequenceClassification استفاده می‌کنیم بدین صورت که x, y را تفکیک کرده و با سپس آن را به بخش train و test تفکیک می‌کنیم و روی بخش train آن را train می‌کنیم و مدل را در
+ <code>models/classification_transformers</code>
+ save می‌کنیم سپس با توکنایزر pars big bert کوئری‌مان را توکنایز می‌کنیم و به مدل‌مان می‌دهیم و روی آن لیبل‌مان را predict می‌کنیم. معیار‌های ارزیابی این حالت دسته‌بندی در رابط کاربری مشخص است و به شرح زیر است.
+ <div dir="ltr" style="text-align:center;">
+<table dir="ltr">
+  <tr>
+    <th>Evaluion criteria</th>
+    <th>Value (%) </th>
+  </tr>
+  <tr>
+    <td>accuracy score</td>
+    <td>86.149095 </td>
+  </tr>
+  <tr>
+    <td>f1 macro score</td>
+    <td>85.920362</td>
+  </tr>
+</table>
+ </div>
+ </li>
+ </br>
+ <li>
+ فایل clustering.py برای انجام clustering یا همان خوشه‌بندی است که از روش kmeans استفاده می‌کنیم امبدینگ fasttext داک‌هایمان را لود می‌کنیم و سپس x, y را از روی آن می‌سازیم و x مان را fit می‌کنیم مدلمان را در 
+ <code>models/clustering/kmeans_clustering.pkl</code>
+ ذخیره می‌کنیم. سپس برای کوئری کاربر امبدینگ fasttext آن را محاسبه کرده و برای predict کردن دسته‌بندی آن را به مدلمان می‌دهیم و سایر خبر‌هایی که مرتبط با آن cluster هستند را به کاربر می‌دهیم.
+معیار‌های ارزیابی این حالت خوشه‌بندی در رابط کاربری مشخص است و به شرح زیر است.
+  <div dir="ltr" style="text-align:center;">
+<table dir="ltr">
+  <tr>
+    <th>Evaluion criteria</th>
+    <th>Value (%) </th>
+  </tr>
+  <tr>
+    <td>RSS score</td>
+    <td>3340.408663 </td>
+  </tr>
+  <tr>
+    <td>purity score</td>
+    <td>85.920362</td>
+  </tr>
+   <tr>
+    <td>davies bouldien score</td>
+    <td>1.94489853</td>
+  </tr>
+   <tr>
+    <td>silhouette score</td>
+    <td> 0.137699</td>
+  </tr>
+</table>
+ </div>
+ </li>
+ </br>
+ <li>
+ فایل link_analysis.py برای تحلیل لینک می‌باشد که دو روش page rank و hits را شامل می‌شود ابتدا از کاربر category می‌گیرد سپس در الگوریتم page rank پنج‌تا از مهم‌ترین خبرها را به کاربر نشان می‌دهد. همچنین روشی دیگر که hits باشد پیاده‌سازی شده است بدین صورت که کاربر بر اساس تعداد ارجاع‌ها به آن خبر و تعداد ارجاع‌هایی که از آن خبر گرفته شده است را مبتنی بر hubs و authorities می دهد. لازم به ذکر است که مدل تحلیل لینک به صورت یک گراف برای هر دسته در
+ <code>models/link_analysis</code>
+ قرار دارد. به طور کلی شانس حضور جملات طولانی در میان top ھا بیشتر است زیرا جملھ مھم جملھای است کھ اطلاعات بیشتری در آن باشد در جملات bottom معمولا جملات کوتاه که اطلاعات خاصی ندارند می‌آید.
+ </li>
 </ul>
 
  
