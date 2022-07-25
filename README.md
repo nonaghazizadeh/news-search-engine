@@ -1,5 +1,8 @@
 # News search engine
 
+
+https://user-images.githubusercontent.com/59199865/180759013-8cf4e1c6-ccc8-459f-9b39-b2e0610aaa87.mov
+
 ## How to start
 1. install vue/cli for front project
 ```
@@ -35,4 +38,3 @@ uvicorn src.api:app --reload
 npm run serve
 ```
 enjoy it!</br></br>
-you can have demo of project in this [link](https://)
