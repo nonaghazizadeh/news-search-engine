@@ -41,8 +41,8 @@
    <code>models/QE_fasttext/all_words_vectors_emb_fasttext.json</code>
    ذخیره می‌کنیم و حال برای تک تک کلمات کوئری‌مان امبدینگ fastetxt محاسبه می‌کنیم و فاصله کسینوسی تک تک کلمات کوئری‌مان را با امبدینگ fasttext ای که برای تمام کلمات تمام داک‌هایمان به دست آورده بودیم محاسبه می‌کنیم. (یک threshold برای فاصله کسینوسی برای جلوگیری از شباهت بسیار زیاد و بیهوده بودن گسترش کوئری‌مان در نظر می‌گیریم.) در نهایت کوئری‌مان را با کلمات به دست آمده جایگزین می‌کنیم و کوئری جدیدمان را جستجو می‌کنیم.
 </br>
-   ارزیابی query expansion با معیار MRR را در این 
-  <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=207229796">لینک</a>
+   ارزیابی query expansion برای روش‌های مختلف با معیار MRR را در این 
+  <a href="https://docs.google.com/spreadsheets/d/1np7Mtd8acc0vMQNJg3OPm46ngwo8jK6LycQeHmv2p1Y/edit#gid=0">لینک</a>
    می توانید مشاهده کنید.
   </li>
   </br>
