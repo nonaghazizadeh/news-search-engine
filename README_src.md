@@ -52,6 +52,55 @@
  ارزیابی boolean search با معیار MRR را در این 
   <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=0">لینک</a>
    می توانید مشاهده کنید.
+   </br>
+   <div>
+<table dir="ltr">
+  <tr style="text-align:left;">
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td style="text-align:left;">Q1</td>
+    <td style="text-align:left;">1 + 1/9</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1/5 + 1/5</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1/2 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1/3 + 1/3</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1/4 + 1/5</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1/3</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1 + 1/2</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1/9 + 1/9</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1/2 + 1/7</td>
+  </tr>
+</table>
+ </div>
   </li>
   </br>
   <li>
