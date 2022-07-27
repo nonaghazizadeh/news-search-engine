@@ -2,6 +2,19 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 فولدر enums:
 </br>
  در این فولدر یک فایل enums.py وجود دارد که در آن مقادیر static که در پروژه وجود دارد مقداردهی شده است.
@@ -14,6 +27,7 @@
 * فایل news_dataset.py برای ساخت dataset از روی دیتا برای بخش transformer classification است
  
 فایل‌های root اصلی فولدر src:
+<html>
 <ul dir="rtl">
   <li>
 
@@ -44,6 +58,275 @@
    ارزیابی query expansion برای روش‌های مختلف با معیار MRR را در این 
   <a href="https://docs.google.com/spreadsheets/d/1np7Mtd8acc0vMQNJg3OPm46ngwo8jK6LycQeHmv2p1Y/edit#gid=0">لینک</a>
    می توانید مشاهده کنید.
+ </br>
+ در ادامه MRR هر یک از روش‌ها آمده است که به وضوح مشخص است که گسترش کوئری باعث بهبود نتایج جست‌وجو می‌شود.
+ </br>
+ <div>
+<table dir="ltr">
+ <tr>
+    <th colspan="2">QE Boolean Search MRR results</th>
+  </tr>
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1 + 1/5</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1/4 + 1/4</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1/2 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1/2 + 1/3</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1/4 + 1/3</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1/3</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1 + 1/2</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1/3 + 1/5</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1/2 + 1/3</td>
+  </tr>
+</table>
+</div>
+مقدار MRR نهایی: 0.549 
+<div>
+<table dir="ltr">
+ <tr>
+    <th colspan="2">QE TFIDF Search MRR results</th>
+  </tr>
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1/2 + 1/2</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1/2 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1/3</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1 + 1/2</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1/3 + 1/2</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1/2 + 1</td>
+  </tr>
+</table>
+</div>
+مقدار MRR نهایی: 0.732 
+<div>
+<table dir="ltr">
+ <tr>
+    <th colspan="2">QE Transformer Search MRR results</th>
+  </tr>
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1 + 1</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1/2 + 1</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1 + 1/2</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1 + 1</td>
+  </tr>
+</table>
+</div>
+مقدار MRR نهایی: 0.925
+<div>
+<table dir="ltr">
+ <tr>
+    <th colspan="2">QE Fasttext Search MRR results</th>
+  </tr>
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1 + 1</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1/2 + 1</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1/3 + 1</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1/2 + 1</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1/3 + 1</td>
+  </tr>
+</table>
+</div>
+
+
+مقدار MRR نهایی: 0.74
+
+<div>
+<table dir="ltr">
+ <tr>
+    <th colspan="2">QE Elastic Search MRR results</th>
+  </tr>
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1 + 1</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1 + 1</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1 + 1</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1/2 + 1</td>
+  </tr>
+</table>
+</div>
+
+مقدار MRR نهایی: 0.925
+
+
   </li>
   </br>
   <li>
@@ -53,15 +336,15 @@
   <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=0">لینک</a>
    می توانید مشاهده کنید.
    </br>
-   <div>
+<div>
 <table dir="ltr">
-  <tr style="text-align:left;">
+  <tr>
     <th>Query</th>
     <th>Sum of reciprocal rank</th>
   </tr>
   <tr >
-    <td style="text-align:left;">Q1</td>
-    <td style="text-align:left;">1 + 1/9</td>
+    <td>Q1</td>
+    <td >1 + 1/9</td>
   </tr>
   <tr>
     <td>Q2</td>
@@ -100,7 +383,8 @@
     <td>1/2 + 1/7</td>
   </tr>
 </table>
- </div>
+</div>
+مقدار MRR نهایي: 0.4746
   </li>
   </br>
   <li>
@@ -113,6 +397,57 @@
  ارزیابی tfidf search با معیار MRR را در این 
   <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=324656315">لینک</a>
    می توانید مشاهده کنید.
+   </br>
+      <div>
+<table dir="ltr">
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1/3 + 1/3</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1 + 1/3</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1/2 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1/3 + 1/3</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1/5 + 1/7</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1 + 1</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1 + 1/2</td>
+  </tr>
+</table>
+</div>
+مقدار MRR نهایي: 0.6775
+
   </li>
   </br> 
   <li>
@@ -127,6 +462,56 @@
  ارزیابی transformer search با معیار MRR را در این 
   <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=109295346">لینک</a>
    می توانید مشاهده کنید.
+   </br>
+         <div>
+<table dir="ltr">
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1 + 1</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1/3 + 1</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1 + 1</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1/2 + 1/2</td>
+  </tr>
+</table>
+</div>
+مقدار MRR نهایي: 0.8667
 
  </li>
  </br>
@@ -139,7 +524,59 @@
  </br>
  ارزیابی fasttext search با معیار MRR را در این 
   <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=170900943">لینک</a>
-   می توانید مشاهده کنید
+   می توانید مشاهده کنید.
+   </br>
+            <div>
+<table dir="ltr">
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1 + 1</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1/2 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1/4 + 1/3</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1/4 + 1/6</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1/3 + 1</td>
+  </tr>
+</table>
+</div>
+مقدار MRR نهایي: 0.74167
+
+
  </li>
  </br>
  <li>
@@ -148,6 +585,56 @@
  ارزیابی elastic search با معیار MRR را در این 
   <a href="https://docs.google.com/spreadsheets/d/13742g0HNDlRK0NYwLdljk8krcd-qf9AprE-cyuszTaQ/edit#gid=1996135177">لینک</a>
    می توانید مشاهده کنید.
+</br>
+            <div>
+<table dir="ltr">
+  <tr>
+    <th>Query</th>
+    <th>Sum of reciprocal rank</th>
+  </tr>
+  <tr >
+    <td>Q1</td>
+    <td >1 + 1</td>
+  </tr>
+  <tr>
+    <td>Q2</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q3</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q4</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q5</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q6</td>
+    <td>1 + 1/2</td>
+  </tr>
+   <tr>
+    <td>Q7</td>
+    <td>1 + 1</td>
+  </tr>
+   <tr>
+    <td>Q8</td>
+    <td>1 + 1/2</td>
+  </tr>
+    <tr>
+    <td>Q9</td>
+    <td>1 + 1</td>
+  </tr>
+    <tr>
+    <td>Q10</td>
+    <td>1/2 + 1</td>
+  </tr>
+</table>
+</div>
+مقدار MRR نهایي: 0.9 
 
  </li>
  </br>
@@ -235,5 +722,5 @@
  قرار دارد. به طور کلی شانس حضور جملات طولانی در میان top ھا بیشتر است زیرا جملھ مھم جملھای است کھ اطلاعات بیشتری در آن باشد در جملات bottom معمولا جملات کوتاه که اطلاعات خاصی ندارند می‌آید.
  </li>
 </ul>
-
+</html>
  
